@@ -1,4 +1,5 @@
 import subprocess
+import time
 
 # Encode a single video to VP9 with a fixed constant rate factor.
 # This function is hard coded to use two-pass because there's no use case not to.
@@ -23,7 +24,7 @@ def encodeVP9(crf, settings):
 
   firstPass.append("-y")
   firstPass.append("-i")
-  firstPass.append(settings['FileDir']+settings['InputFilename']+settings['OutputExtension'])
+  firstPass.append(settings['FileDir']+settings['InputFilename']+settings['InputExtension'])
 
   if settings['Scale']:
     # These args will be omitted entirely if Scale is false.
@@ -51,7 +52,7 @@ def encodeVP9(crf, settings):
   # End First Pass
 
   secondPass.append("-i")
-  secondPass.append(settings['FileDir']+settings['InputFilename']+settings['OutputExtension'])
+  secondPass.append(settings['FileDir']+settings['InputFilename']+settings['InputExtension'])
 
   if settings['Scale']:
     secondPass.append("-vf")
@@ -79,16 +80,37 @@ def encodeVP9(crf, settings):
   secondPass.append("libopus")
   secondPass.append(settings['OutFileDir']+settings['InputFilename']+"_crf"+crf+"_"+horizontalLines+settings['OutputExtension'])
   
-  
 
-  print("Running first pass.")
-  print(firstPass)
-  # commandResult = subprocess.run(ff_args, capture_output=True)
+  commandResult = ''
 
-  print("Running second pass.")
-  print(secondPass)
 
-  return False
+  t1 = time.localtime()
+  # current_time = time.strftime("%H:%M:%S", t)
+  # print(current_time)
+  print("\nRunning first pass: "+ time.strftime("%H:%M:%S", t1))
+
+  # print(current_time)
+  for arg in firstPass:
+    # Print the args without the brackets and commas
+    print(arg, end=" ", flush=True)
+  if not settings['SkipEncoding']:
+    commandResult = subprocess.run(firstPass, capture_output=True)
+  print(commandResult)
+
+  t2 = time.localtime()
+  # current_time = time.strftime("%H:%M:%S", t2)
+  print("\nRunning second pass. "+ time.strftime("%H:%M:%S", t2))
+  # print(current_time)
+  # Print the command as it would normally read, without brackets and commas
+  for arg in secondPass:
+    print(arg, end=" ", flush=True)
+  if not settings['SkipEncoding']:
+    commandResult = subprocess.run(secondPass, capture_output=True)
+  print(commandResult)
+
+  print
+
+  return True
 
   # commandResult = subprocess.run(['ls','-l'], capture_output=True)
   # print(commandResult)

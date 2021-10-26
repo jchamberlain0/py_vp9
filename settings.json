@@ -1,11 +1,11 @@
 {
-  "InputFilename": "2021-10-25_21-41-14",
+  "InputFilename": "2021-10-26_17-59-57",
   "InputExtension": ".mp4",
   "OutputExtension": ".webm",
   "FileDir": "C:/video/releaseOBS/",
   "FolderDir": "C:/Users/Saturn/Videos/",
   "Debug": true,
-  "Batch": true,
+  "Batch": false,
   "Scale": true,
   "ScaleMode": "lanczos",
   "Environment": "dev",

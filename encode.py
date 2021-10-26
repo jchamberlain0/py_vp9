@@ -1,4 +1,5 @@
 import json
+import yaml
 import pprint
 import vp9
 
@@ -14,12 +15,16 @@ import vp9
 # False 	false
 # None 	null
 
-with open('settings.json') as settings_file:
-  settings = json.load(settings_file)
+# with open('settings.json') as settings_file:
+#   settings = json.load(settings_file)
+
+with open("settings.yaml", 'r') as stream:
+    settings = yaml.safe_load(stream)
 
 
 if settings['Debug']:
   pp = pprint.PrettyPrinter(indent=2)
+  print()
   pp.pprint(settings)
 
 
@@ -45,3 +50,4 @@ if result == True:
 else:
   print('\n\nThere was an issue with encoding. Exiting...')
 
+input()
