@@ -1,0 +1,18 @@
+{
+  "InputFilename": "2021-10-25_21-41-14",
+  "InputExtension": ".mp4",
+  "OutputExtension": ".webm",
+  "FileDir": "C:/video/releaseOBS/",
+  "FolderDir": "C:/Users/Saturn/Videos/",
+  "Debug": true,
+  "Batch": true,
+  "Scale": true,
+  "ScaleMode": "lanczos",
+  "Environment": "dev",
+  "Mode": "file",
+  "OutFileDir": "C:/video/",
+  "OutFolderDir": "C:/video/",
+  "OutResolution": "640x480",
+  "CRFDefault": "20",
+  "CRF": ["50", "30", "12", "8", "4"]
+}
