@@ -10,17 +10,17 @@ Encode high efficiency video for web, using [ffmpeg](https://ffmpeg.org/) and [l
 
 ### Get started
 
-- Install dependencies:
+Install dependencies:
   ```
   sudo apt install ffmpeg
   pip install pyyaml
   ```
-- Modify `settings.yaml` as needed:
+Modify `settings.yaml` as needed:
   ```
   FileDir: C:/video/
   ...
   ```
-- Encode:
+Encode:
   ```
   python encode.py
   ```
@@ -39,7 +39,7 @@ Encode high efficiency video for web, using [ffmpeg](https://ffmpeg.org/) and [l
 | `Scale` | true | Flag: Scale output. Intended for integer downscaling.
 | `OutResolution` | 640x480 | String resolution in the format WIDTHxHEIGHT. Ignored when not scaling. |
 | `ScaleMode` | lanczos | [Algorithm](https://ffmpeg.org/ffmpeg-scaler.html#toc-Scaler-Options) used to resample image when `Scale` is on. |
-| `Batch` | false | Flag: encode multiple quality options as in the `CRF` array. |
+| `Batch` | false | Flag: encode multiple quality options defined in the `CRF` array. |
 | `CRFDefault` | 20 | String crf value to use in single-file mode. |
 | `CRF` | ['50,'30','12'] | Array of string crf values to encode in batch mode. |
 | `Debug` | true | Flag: additional logging. |
