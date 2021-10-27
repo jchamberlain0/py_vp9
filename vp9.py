@@ -22,9 +22,10 @@ def encodeVP9(crf, settings):
 
 
 
+  # Build first pass
   firstPass.append("-y")
   firstPass.append("-i")
-  firstPass.append(settings['FileDir']+settings['InputFilename']+settings['InputExtension'])
+  firstPass.append(settings['InputFileDir']+settings['InputFilename']+settings['InputExtension'])
 
   if settings['Scale']:
     # These args will be omitted entirely if Scale is false.
@@ -49,10 +50,10 @@ def encodeVP9(crf, settings):
   # TODO: add operating system check so this works on Linux.
   firstPass.append("NUL")
 
-  # End First Pass
 
+  # Build Second Pass
   secondPass.append("-i")
-  secondPass.append(settings['FileDir']+settings['InputFilename']+settings['InputExtension'])
+  secondPass.append(settings['InputFileDir']+settings['InputFilename']+settings['InputExtension'])
 
   if settings['Scale']:
     secondPass.append("-vf")
