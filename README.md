@@ -5,7 +5,7 @@ Encode high efficiency video for web, using [ffmpeg](https://ffmpeg.org/) and [l
 ### Features
 - **File**: Transcode a video to a single vp9 webm file.
 	- Default crf: 30
-- **Batch**: Transcode a single input video to multiple files, with user-defined quality option thresholds.
+- **Batch**: Transcode a single input video to multiple files, with user-defined quality option thresholds. This is useful for providing users with quality options.
 	- Default crf values: 50, 30, 20, 12, 8
 
 ### Get started
