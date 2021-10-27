@@ -25,7 +25,7 @@ Encode high efficiency video for web, using [ffmpeg](https://ffmpeg.org/) and [l
 
 | Field  | Example | Description |
 | ---: | -------: | :--------- |
-| `FileDir` | C:/video/ | Path to input video file, with trailing slash. |
+| `InputFileDir` | C:/video/ | Path to input video file, with trailing slash. |
 | `InputFilename` | 2021-10-26 | Filename of the input video without its extension. |
 | `InputExtension` | .mp4 | The extension of the input/recording file. |
 | `OutFileDir` | C:/video/web/ | Output directory, with trailing slash. |
