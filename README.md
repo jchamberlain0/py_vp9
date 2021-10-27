@@ -1,52 +1,56 @@
 # py_vp9
-Script to encode high efficiency video for web, using ffmpeg and libvpx. Manipulate `settings.yaml` instead of the CLI.
+Encode high efficiency video for web, using ffmpeg and libvpx.
 
 Requires [ffmpeg](https://ffmpeg.org/) to be installed and in your `PATH`.
 
-### Usage
+### Get started
 
-```
-pip install pyyaml
-python encode.py
-```
+- Install dependencies:
+  ```
+  sudo apt install ffmpeg
+  pip install pyyaml
+  ```
+- Modify `settings.yaml` as needed:
+  ```
+  FileDir: C:/video/
+  ...
+  ```
+- Encode:
+  ```
+  python encode.py
+  ```
 
-## Example settings file
+<br>
 
-```
----
-InputFilename: 2021-10-26_18-46-11
-InputExtension: '.mp4'
-OutputExtension: '.webm'
-FileDir: C:/video/recordings/
-FolderDir: C:/Users/Saturn/Videos/
-Debug: true
-SkipEncoding: false
-Batch: false
-Scale: true
-ScaleMode: lanczos
-Environment: dev
-Mode: file
-OutFileDir: C:/video/finished
-OutFolderDir: C:/video/
-OutResolution: 640x480
-CRFDefault: '26'
-CRF:
-  - '50'
-  - '30'
-  - '20'
-  - '12'
-  - '8'
+### Settings
 
-```
+| Field  | Example | Description |
+| ---: | -------: | :--------- |
+| `FileDir` | C:/video/ | Path to input video file, with trailing slash. |
+| `InputFilename` | 2021-10-26 | Filename of the input video without its extension. |
+| `InputExtension` | .mp4 | The extension of the input/recording file. |
+| `OutFileDir` | C:/video/web/ | Output directory, with trailing slash |
+| `OutputExtension` | .webm | The container format and extension of the output. `.webm` is recommended over `.mkv`, due to better browser support. |
+| `Scale` | true | Flag: Scale output. Intended for integer downscaling.
+| `OutResolution` | 640x480 | String resolution in the format WIDTHxHEIGHT. Ignored when not scaling. |
+| `ScaleMode` | lanczos | [Algorithm](https://ffmpeg.org/ffmpeg-scaler.html#toc-Scaler-Options) used to resample image when `Scale` is on. |
+| `Batch` | false | Flag: encode multiple quality options as in the `CRF` array. |
+| `CRFDefault` | 20 | String crf value to use in single-file mode. |
+| `CRF` | ['50,'30','12'] | Array of string crf values to encode in batch mode. |
+| `Debug` | true | Flag: additional logging. |
+| `SkipEncoding` | false | Flag: print args without executing them. |
 
-### Features:
+<br>
+
+### Features
 - _File_: Transcode a single input video to vp9
 	- Default crf: 30
 - _Batch_: Transcode a single input video to multiple quality option thresholds based on settings (Batch mode)
 	- Default crf values: 50, 30, 20, 12, 8 (it may be preferable to use crf 4 or lower for exceptional IQ)
 
+<br>
 
-### Encoding settings:
+### Encoding details
 - Two-pass.
 - Optional downscaling by integer with lanczos (`1280x920` -> `640x480`).
 - libvpx-vp9 encoding. From the [ffmpeg docs](https://trac.ffmpeg.org/wiki/Encode/VP9):
@@ -54,7 +58,9 @@ CRF:
 - Variable bitrate switch `-b:v` is set to 0, because the high quality use case prefers that image quality is not variable.
 - Constant rate factor switch `-crf` is set by the user to achieve the desired consistent image quality across the length of the video. Good defaults are between 8 and 30, but more research is needed.
 
-### Coming soon
+<br>
+
+### Future
 - AV1 encoding with rav1e
 - `Folder` mode: Transcode all items inside a single folder, with or without batch mode.
 - `-deadline` and `-cpu-used` arguments to further optimize IQ
