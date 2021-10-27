@@ -1,7 +1,7 @@
 # py_vp9
 Script to encode high efficiency video for web, using ffmpeg and libvpx. Manipulate `settings.yaml` instead of the CLI.
 
-Requires ffmpeg to be installed and in your `PATH`.
+Requires [ffmpeg](https://ffmpeg.org/) to be installed and in your `PATH`.
 
 ### Usage
 
