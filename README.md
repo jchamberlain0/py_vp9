@@ -2,6 +2,12 @@
 
 Encode high efficiency video for web, using [ffmpeg](https://ffmpeg.org/) and [libvpx](https://github.com/webmproject/libvpx).
 
+### Features
+- **File**: Transcode a video to a single vp9 webm file.
+	- Default crf: 30
+- **Batch**: Transcode a single input video to multiple files, with user-defined quality option thresholds.
+	- Default crf values: 50, 30, 20, 12, 8
+
 ### Get started
 
 - Install dependencies:
@@ -25,11 +31,11 @@ Encode high efficiency video for web, using [ffmpeg](https://ffmpeg.org/) and [l
 
 | Field  | Example | Description |
 | ---: | -------: | :--------- |
-| `InputFileDir` | C:/video/ | Path to input video file, with trailing slash. |
+| `InputFileDir` | C:/video/ | Path to input video, with trailing slash. |
 | `InputFilename` | 2021-10-26 | Filename of the input video without its extension. |
-| `InputExtension` | .mp4 | The extension of the input/recording file. |
+| `InputExtension` | .mp4 | The extension of the input video. |
 | `OutFileDir` | C:/video/web/ | Output directory, with trailing slash. |
-| `OutputExtension` | .webm | Container format. `.webm` is recommended over `.mkv` |
+| `OutputExtension` | .webm | Container format. `.webm` is highly recommended over `.mkv` |
 | `Scale` | true | Flag: Scale output. Intended for integer downscaling.
 | `OutResolution` | 640x480 | String resolution in the format WIDTHxHEIGHT. Ignored when not scaling. |
 | `ScaleMode` | lanczos | [Algorithm](https://ffmpeg.org/ffmpeg-scaler.html#toc-Scaler-Options) used to resample image when `Scale` is on. |
@@ -38,14 +44,6 @@ Encode high efficiency video for web, using [ffmpeg](https://ffmpeg.org/) and [l
 | `CRF` | ['50,'30','12'] | Array of string crf values to encode in batch mode. |
 | `Debug` | true | Flag: additional logging. |
 | `SkipEncoding` | false | Flag: print args without executing them. |
-
-<br>
-
-### Features
-- _File_: Transcode a single input video to vp9
-	- Default crf: 30
-- _Batch_: Transcode a single input video to multiple quality option thresholds based on settings (Batch mode)
-	- Default crf values: 50, 30, 20, 12, 8 (it may be preferable to use crf 4 or lower for exceptional IQ)
 
 <br>
 
