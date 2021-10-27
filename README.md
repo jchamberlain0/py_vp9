@@ -58,6 +58,7 @@ Encode:
 <br>
 
 ### Future
+- Improve workflow by starting the encode without needing to copy/paste filenames. Drag & drop?
 - AV1 encoding with rav1e, when it has better support
 - `Folder` mode: Transcode all items inside a single folder, with or without batch mode.
 - `-deadline` and `-cpu-used` arguments to further optimize IQ
