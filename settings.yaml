@@ -13,7 +13,10 @@ Environment: dev
 Mode: file
 OutFileDir: C:/video/
 OutFolderDir: C:/video/
-OutResolution: 640x480
+OutResolution: 320x240
+# OutResolution: 640x480
+# OutResolution: 960x720
+# OutResolution: 1280x960
 CRFDefault: '26'
 CRF:
   - '50'
