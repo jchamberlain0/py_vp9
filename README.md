@@ -1,7 +1,6 @@
 # py_vp9
-Encode high efficiency video for web, using ffmpeg and libvpx.
 
-Requires [ffmpeg](https://ffmpeg.org/) to be installed and in your `PATH`.
+Encode high efficiency video for web, using [ffmpeg](https://ffmpeg.org/) and [libvpx](https://github.com/webmproject/libvpx).
 
 ### Get started
 
@@ -29,8 +28,8 @@ Requires [ffmpeg](https://ffmpeg.org/) to be installed and in your `PATH`.
 | `FileDir` | C:/video/ | Path to input video file, with trailing slash. |
 | `InputFilename` | 2021-10-26 | Filename of the input video without its extension. |
 | `InputExtension` | .mp4 | The extension of the input/recording file. |
-| `OutFileDir` | C:/video/web/ | Output directory, with trailing slash |
-| `OutputExtension` | .webm | The container format and extension of the output. `.webm` is recommended over `.mkv`, due to better browser support. |
+| `OutFileDir` | C:/video/web/ | Output directory, with trailing slash. |
+| `OutputExtension` | .webm | Container format. `.webm` is recommended over `.mkv` |
 | `Scale` | true | Flag: Scale output. Intended for integer downscaling.
 | `OutResolution` | 640x480 | String resolution in the format WIDTHxHEIGHT. Ignored when not scaling. |
 | `ScaleMode` | lanczos | [Algorithm](https://ffmpeg.org/ffmpeg-scaler.html#toc-Scaler-Options) used to resample image when `Scale` is on. |
@@ -61,6 +60,6 @@ Requires [ffmpeg](https://ffmpeg.org/) to be installed and in your `PATH`.
 <br>
 
 ### Future
-- AV1 encoding with rav1e
+- AV1 encoding with rav1e, when it has better support
 - `Folder` mode: Transcode all items inside a single folder, with or without batch mode.
 - `-deadline` and `-cpu-used` arguments to further optimize IQ
