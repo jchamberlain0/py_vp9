@@ -4,6 +4,8 @@ import pprint
 import time
 import vp9
 
+# TODO: write another script that strips audio instead of re-encoding a bunch of files in batch mode.
+
 # Python 	JSON
 
 # dict 	Object
@@ -33,26 +35,31 @@ result = False
 filesEncoded = 0
 
 if settings['Batch']:
-  # Batch mode loops over CRF values in the settings and encodes one video for each quality level
-  for OutputResolution in settings['BatchOutputResolutions']:
+  # Batch mode nests several loops for settings, and encodes one video for each intersection
+  for Codec in settings['BatchCodecs']:
     
-    # default output resolution means don't scale.
-    if OutputResolution == 'default':
-      modSettings['Scale'] = False
-    else:
-      # set the resolution for this encode
-      modSettings['Scale'] = True
-      modSettings['OutResolution'] = OutputResolution 
+    # Set the codec for these encodes.
+    modSettings['OutputCodec'] = Codec
 
-    for crf in settings['CRF']:
-      time.sleep(1)
-      result = vp9.encodeVP9(crf,modSettings) # Pass in the modified settings.
-      if result == True:
-        print('Finished encode for crf '+crf)
-        filesEncoded = filesEncoded+1
-      if result != True:
-        print("\nAn issue was encountered while encoding file with crf "+crf+". Stopping batch mode.")
-        break
+    for OutputResolution in settings['BatchOutputResolutions']:
+      
+      # default output resolution means don't scale.
+      if OutputResolution == 'default':
+        modSettings['Scale'] = False
+      else:
+        # set the resolution for these encodes.
+        modSettings['Scale'] = True
+        modSettings['OutResolution'] = OutputResolution 
+
+      for crf in settings['CRF']:
+        time.sleep(1)
+        result = vp9.encodeVP9(crf,modSettings) # Pass in the modified settings.
+        if result == True:
+          print('Finished encode for crf '+crf)
+          filesEncoded = filesEncoded+1
+        if result != True:
+          print("\nAn issue was encountered while encoding file with crf "+crf+". Stopping batch mode.")
+          break
 else:
   # Pass a flag to the vp9 encoding function instead of a value
   result = vp9.encodeVP9("defaultCRF",settings)
