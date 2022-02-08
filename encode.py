@@ -19,6 +19,9 @@ import vp9
 with open("settings.yaml", 'r') as stream:
     settings = yaml.safe_load(stream)
 
+# settings copy that can be mutated to allow multiple results in single-encode context.
+# likely unnecessary but is currently saving me a headache
+modSettings = settings
 
 if settings['Debug']:
   pp = pprint.PrettyPrinter(indent=2)
@@ -31,16 +34,25 @@ filesEncoded = 0
 
 if settings['Batch']:
   # Batch mode loops over CRF values in the settings and encodes one video for each quality level
-  for crf in settings['CRF']:
-    time.sleep(1)
-    result = vp9.encodeVP9(crf,settings)
-    if result == True:
-      print('Finished encode for crf '+crf)
-      filesEncoded = filesEncoded+1
-    if result != True:
-      print("\nAn issue was encountered while encoding file with crf "+crf+". Stopping batch mode.")
-      break
-  # result = True
+  for OutputResolution in settings['BatchOutputResolutions']:
+    
+    # default output resolution means don't scale.
+    if OutputResolution == 'default':
+      modSettings['Scale'] = False
+    else:
+      # set the resolution for this encode
+      modSettings['Scale'] = True
+      modSettings['OutResolution'] = OutputResolution 
+
+    for crf in settings['CRF']:
+      time.sleep(1)
+      result = vp9.encodeVP9(crf,modSettings) # Pass in the modified settings.
+      if result == True:
+        print('Finished encode for crf '+crf)
+        filesEncoded = filesEncoded+1
+      if result != True:
+        print("\nAn issue was encountered while encoding file with crf "+crf+". Stopping batch mode.")
+        break
 else:
   # Pass a flag to the vp9 encoding function instead of a value
   result = vp9.encodeVP9("defaultCRF",settings)
