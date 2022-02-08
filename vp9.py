@@ -24,8 +24,17 @@ def encodeVP9(crf, settings):
 
   # Build first pass
   firstPass.append("-y")
+
+  if settings['TrimVideo']:
+    if settings['TrimStart']:
+      firstPass.append("-ss")
+      firstPass.append(str(settings['TrimStart']))
+
   firstPass.append("-i")
   firstPass.append(settings['InputFileDir']+settings['InputFilename']+settings['InputExtension'])
+
+  firstPass.append("-deadline")
+  firstPass.append("best")
 
   if settings['Scale']:
     # These args will be omitted entirely if Scale is false.
@@ -36,6 +45,8 @@ def encodeVP9(crf, settings):
     firstPass.append("-sws_flags")
     firstPass.append(settings['ScaleMode'])
   
+
+
   firstPass.append("-c:v")
   firstPass.append("libvpx-vp9")
   firstPass.append("-b:v")
@@ -50,10 +61,18 @@ def encodeVP9(crf, settings):
   # TODO: add operating system check so this works on Linux.
   firstPass.append("NUL")
 
+  if settings['TrimVideo']:
+    if settings['TrimStart']:
+      secondPass.append("-ss")
+      secondPass.append(str(settings['TrimStart']))
 
   # Build Second Pass
   secondPass.append("-i")
   secondPass.append(settings['InputFileDir']+settings['InputFilename']+settings['InputExtension'])
+
+  # TODO: make this a setting!
+  secondPass.append("-deadline")
+  secondPass.append("best")
 
   if settings['Scale']:
     secondPass.append("-vf")
@@ -79,6 +98,11 @@ def encodeVP9(crf, settings):
   secondPass.append("2")
   secondPass.append("-c:a")
   secondPass.append("libopus")
+  # secondPass.append("-acodec")
+  # secondPass.append("copy")
+
+  if settings['StripAudio']:
+    secondPass.append("-an")
   secondPass.append(settings['OutFileDir']+settings['InputFilename']+"_crf"+crf+"_"+horizontalLines+settings['OutputExtension'])
   
 
