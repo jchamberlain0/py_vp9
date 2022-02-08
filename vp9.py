@@ -4,7 +4,7 @@ import time
 # Encode a single video to VP9 with a fixed constant rate factor.
 # This function is hard coded to use two-pass because there's no use case not to.
 # For simplicity's sake, the second pass is added in sequence,
-#   rather than trying to modify the first pass arg list or something fancy.
+#   rather than trying to modify the first pass arg list or something fancy like that.
 def encodeVP9(crf, settings):
 
   # List of arguments to pass to ffmpeg
