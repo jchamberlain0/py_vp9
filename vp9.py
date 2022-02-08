@@ -7,6 +7,9 @@ import time
 #   rather than trying to modify the first pass arg list or something fancy.
 def encodeVP9(crf, settings):
 
+  if crf == '20':
+    return False
+
   # List of arguments to pass to ffmpeg
   firstPass = ['ffmpeg']
   secondPass = ['ffmpeg']
@@ -33,8 +36,9 @@ def encodeVP9(crf, settings):
   firstPass.append("-i")
   firstPass.append(settings['InputFileDir']+settings['InputFilename']+settings['InputExtension'])
 
-  firstPass.append("-deadline")
-  firstPass.append("best")
+  if settings['UseDeadline']:
+    firstPass.append("-deadline")
+    firstPass.append(settings['Deadline'])
 
   if settings['Scale']:
     # These args will be omitted entirely if Scale is false.
@@ -70,9 +74,9 @@ def encodeVP9(crf, settings):
   secondPass.append("-i")
   secondPass.append(settings['InputFileDir']+settings['InputFilename']+settings['InputExtension'])
 
-  # TODO: make this a setting!
-  secondPass.append("-deadline")
-  secondPass.append("best")
+  if settings['UseDeadline']:
+    secondPass.append("-deadline")
+    secondPass.append(settings['Deadline'])
 
   if settings['Scale']:
     secondPass.append("-vf")
@@ -136,6 +140,3 @@ def encodeVP9(crf, settings):
   print
 
   return True
-
-  # commandResult = subprocess.run(['ls','-l'], capture_output=True)
-  # print(commandResult)
