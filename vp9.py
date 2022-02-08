@@ -49,7 +49,8 @@ def encodeVP9(crf, settings):
 
 
   firstPass.append("-c:v")
-  firstPass.append("libvpx-vp9")
+  # firstPass.append("libvpx-vp9")
+  firstPass.append(settings['OutputCodec'])
   firstPass.append("-b:v")
   firstPass.append("0")
   firstPass.append("-crf")
@@ -82,12 +83,13 @@ def encodeVP9(crf, settings):
     secondPass.append(settings['ScaleMode'])
   
   secondPass.append("-c:v")
-  secondPass.append("libvpx-vp9")
+  secondPass.append(settings['OutputCodec'])
   secondPass.append("-b:v")
   secondPass.append("0")
   secondPass.append("-crf")
 
   # Check if a CRF value was passed in - this will be used by batch mode.
+  # TODO: this block is redundant!!
   if crf == "defaultCRF":
     # Single encode mode uses the CRF from settings.
     secondPass.append(settings['CRFDefault'])

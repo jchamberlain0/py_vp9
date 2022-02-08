@@ -8,6 +8,8 @@ InputExtension: '.avi'
 
 OutFileDir: C:/video/
 OutputExtension: '.webm'
+OutputCodec: 'libvpx'
+# OutputCodec: 'libvpx-vp9'
 
 StripAudio: true
 TrimVideo: false
@@ -32,6 +34,10 @@ CRF: #batch mode crf
 BatchOutputResolutions:
   - 'default'
   - '320x240'
+
+BatchCodecs:
+  - 'libvpx'
+  - 'libvpx-vp9'
 
 UseDeadline: true
 Deadline: 'best' 
