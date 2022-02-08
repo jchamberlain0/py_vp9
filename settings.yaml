@@ -5,19 +5,22 @@ InputFileDir: C:/video/lossless/
 InputFilename: 2022-02-06_11-56-02
 # InputExtension: '.mp4'
 InputExtension: '.avi'
+
 OutFileDir: C:/video/
 OutputExtension: '.webm'
+
 StripAudio: true
 TrimVideo: false
 TrimStart: '00:00:00.182'
 Scale: true
+ScaleMode: neighbor
 OutResolution: 320x240
 # OutResolution: 320x240
 # OutResolution: 640x480
 # OutResolution: 960x720
 # OutResolution: 1280x960
-ScaleMode: neighbor
-Batch: false
+
+Batch: true
 CRFDefault: '20'
 CRF:
   - '50'
@@ -25,7 +28,10 @@ CRF:
   - '20'
   - '12'
   - '8'
+
 UseDeadline: true
-Deadline: 'best'
+Deadline: 'best' 
+# Deadline: 'good' # use this one to make speed more reasonable
+
 Debug: true
-SkipEncoding: false
+SkipEncoding: true
