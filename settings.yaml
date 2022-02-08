@@ -1,22 +1,31 @@
 ---
-InputFileDir: C:/video/releaseOBS/
-InputFilename: 2021-10-26_18-46-11
-InputExtension: '.mp4'
+InputFileDir: C:/video/lossless/
+# InputFileDir: C:/video/releaseOBS/
+# InputFilename: 2021-10-26_18-46-11
+InputFilename: 2022-02-06_11-56-02
+# InputExtension: '.mp4'
+InputExtension: '.avi'
 OutFileDir: C:/video/
 OutputExtension: '.webm'
+StripAudio: true
+TrimVideo: false
+TrimStart: '00:00:00.182'
 Scale: true
-OutResolution: 640x480
+OutResolution: 320x240
+# OutResolution: 320x240
 # OutResolution: 640x480
 # OutResolution: 960x720
 # OutResolution: 1280x960
-ScaleMode: lanczos
+ScaleMode: neighbor
 Batch: false
-CRFDefault: '26'
+CRFDefault: '20'
 CRF:
   - '50'
   - '30'
   - '20'
   - '12'
   - '8'
+UseDeadline: true
+Deadline: 'best'
 Debug: true
 SkipEncoding: false
