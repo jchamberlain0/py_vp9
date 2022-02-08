@@ -7,9 +7,6 @@ import time
 #   rather than trying to modify the first pass arg list or something fancy.
 def encodeVP9(crf, settings):
 
-  if crf == '20':
-    return False
-
   # List of arguments to pass to ffmpeg
   firstPass = ['ffmpeg']
   secondPass = ['ffmpeg']
