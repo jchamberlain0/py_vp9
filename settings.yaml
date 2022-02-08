@@ -22,12 +22,16 @@ OutResolution: 320x240
 
 Batch: true
 CRFDefault: '20'
-CRF:
+CRF: #batch mode crf
   - '50'
   - '30'
   - '20'
   - '12'
   - '8'
+
+BatchOutputResolutions:
+  - 'default'
+  - '320x240'
 
 UseDeadline: true
 Deadline: 'best' 
