@@ -5,6 +5,7 @@ import time
 import vp9
 import os
 import sys
+import jpg
 
 # TODO: write another script that strips audio instead of re-encoding a bunch of files in batch mode.
 
@@ -22,6 +23,10 @@ except FileExistsError:
 # settings copy that can be mutated to allow multiple results in single-encode context.
 # likely unnecessary but is currently saving me a headache
 modSettings = settings
+
+if settings['CreateImages']:
+  if jpg.createJpgs(settings):
+    print('Saved images.. Maybe.')
 
 if settings['Debug']:
   pp = pprint.PrettyPrinter(indent=2)

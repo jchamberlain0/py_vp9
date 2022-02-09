@@ -44,5 +44,7 @@ BatchCodecs:
   - 'libvpx'
   - 'libvpx-vp9'
 
+CreateImages: true
+
 Debug: true
 SkipEncoding: true
