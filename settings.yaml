@@ -2,16 +2,16 @@
 InputFileDir: C:/video/lossless/
 # InputFileDir: C:/video/releaseOBS/
 # InputFilename: 2021-10-26_18-46-11
-InputFilename: 2022-02-06_11-56-02
+InputFilename: 2022-02-08_18-21-13
 # InputExtension: '.mp4'
 InputExtension: '.avi'
 
 OutFileDir: C:/video/
 OutputExtension: '.webm'
-OutputCodec: 'libvpx'
-# OutputCodec: 'libvpx-vp9'
+# OutputCodec: 'libvpx'
+OutputCodec: 'libvpx-vp9'
 
-StripAudio: true
+StripAudio: false
 TrimVideo: false
 TrimStart: '00:00:00.182'
 Scale: true
@@ -22,14 +22,18 @@ OutResolution: 320x240
 # OutResolution: 960x720
 # OutResolution: 1280x960
 
+UseDeadline: false
+Deadline: 'best'
+# Deadline: 'good' # use this one to make speed more reasonable
+
 Batch: true
 CRFDefault: '20'
 CRF: #batch mode crf
-  - '50'
-  - '30'
-  - '20'
+  # - '50'
+  - '28'
+  # - '20'
   - '12'
-  - '8'
+  # - '8'
 
 BatchOutputResolutions:
   - 'default'
@@ -39,9 +43,5 @@ BatchCodecs:
   - 'libvpx'
   - 'libvpx-vp9'
 
-UseDeadline: true
-Deadline: 'best' 
-# Deadline: 'good' # use this one to make speed more reasonable
-
 Debug: true
-SkipEncoding: true
+SkipEncoding: false
