@@ -1,7 +1,7 @@
 import subprocess
 import time
 
-# Encode a single video to VP9 with a fixed constant rate factor.
+# Encode a single video to VP9 with fixed settings provided by the colling function.
 # This function is hard coded to use two-pass because there's no use case not to.
 # For simplicity's sake, the second pass is added in sequence,
 #   rather than trying to modify the first pass arg list or something fancy like that.
@@ -106,7 +106,7 @@ def encodeVP9(crf, settings):
 
   if settings['StripAudio']:
     secondPass.append("-an")
-  secondPass.append(settings['OutFileDir']+settings['InputFilename']+"_crf"+crf+"_"+horizontalLines+settings['OutputExtension'])
+  secondPass.append(settings['OutFileDir']+settings['InputFilename']+"_"+settings['OutputCodec']+"_crf"+crf+"_"+horizontalLines+settings['OutputExtension'])
   
 
   commandResult = ''
