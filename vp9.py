@@ -106,7 +106,7 @@ def encodeVP9(crf, settings):
 
   if settings['StripAudio']:
     secondPass.append("-an")
-  secondPass.append(settings['OutFileDir']+settings['InputFilename']+"_"+settings['OutputCodec']+"_crf"+crf+"_"+horizontalLines+settings['OutputExtension'])
+  secondPass.append(settings['NewOutputFolder']+settings['OutFileDir']+settings['InputFilename']+"_"+settings['OutputCodec']+"_crf"+crf+"_"+horizontalLines+settings['OutputExtension'])
   
 
   commandResult = ''

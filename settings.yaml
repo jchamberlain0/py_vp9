@@ -7,6 +7,7 @@ InputFilename: 2022-02-08_18-21-13
 InputExtension: '.avi'
 
 OutFileDir: C:/video/
+NewOutputFolder: 'testt'
 OutputExtension: '.webm'
 # OutputCodec: 'libvpx'
 OutputCodec: 'libvpx-vp9'
@@ -44,4 +45,4 @@ BatchCodecs:
   - 'libvpx-vp9'
 
 Debug: true
-SkipEncoding: false
+SkipEncoding: true
