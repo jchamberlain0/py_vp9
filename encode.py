@@ -3,20 +3,10 @@ import yaml
 import pprint
 import time
 import vp9
+import os
 
 # TODO: write another script that strips audio instead of re-encoding a bunch of files in batch mode.
 
-# Python 	JSON
-
-# dict 	Object
-# list 	Array
-# tuple 	Array
-# str 	String
-# int 	Number
-# float 	Number
-# True 	true
-# False 	false
-# None 	null
 
 with open("settings.yaml", 'r') as stream:
     settings = yaml.safe_load(stream)
@@ -35,7 +25,7 @@ result = False
 filesEncoded = 0
 
 if settings['Batch']:
-  # Batch mode nests several loops for settings, and encodes one video for each intersection
+  # Batch mode nests several loops over arrays in settings, and encodes one video for each intersection.
   for Codec in settings['BatchCodecs']:
     
     # Set the codec for these encodes.
