@@ -7,7 +7,7 @@ InputFilename: 2022-02-09_19-36-31
 InputExtension: '.avi'
 
 OutFileDir: C:/video/
-NewOutputFolder: 'kokiri-bridge-hover'
+NewOutputFolder: 'kokiri-bridge-hover8'
 OutputExtension: '.webm'
 # OutputCodec: 'libvpx'
 OutputCodec: 'libvpx-vp9'
@@ -47,4 +47,5 @@ BatchCodecs:
 CreateImages: true
 
 Debug: true
-SkipEncoding: false
+SkipEncoding: true
+SkipImages: false
