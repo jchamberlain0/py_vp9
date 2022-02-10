@@ -20,6 +20,11 @@ except FileExistsError:
   print("NewOutputFolder \""+ settings['NewOutputFolder'] +"\" already exists. This isn't a bug, it's a feature to help keep your folders clean :)")
   sys.exit("Exiting")
 
+os.mkdir(settings['OutFileDir']+settings['NewOutputFolder']+'/images')
+# except FileExistsError:
+#   print("NewOutputFolder \""+ settings['NewOutputFolder'] +"\" already exists. This isn't a bug, it's a feature to help keep your folders clean :)")
+#   sys.exit("Exiting")
+
 # settings copy that can be mutated to allow multiple results in single-encode context.
 # likely unnecessary but is currently saving me a headache
 modSettings = settings
