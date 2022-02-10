@@ -2,19 +2,19 @@
 InputFileDir: C:/video/lossless/
 # InputFileDir: C:/video/releaseOBS/
 # InputFilename: 2021-10-26_18-46-11
-InputFilename: 2022-02-08_18-21-13
+InputFilename: 2022-02-09_19-36-31
 # InputExtension: '.mp4'
 InputExtension: '.avi'
 
 OutFileDir: C:/video/
-NewOutputFolder: 'testt'
+NewOutputFolder: 'kokiri-bridge-hover'
 OutputExtension: '.webm'
 # OutputCodec: 'libvpx'
 OutputCodec: 'libvpx-vp9'
 
 StripAudio: false
 TrimVideo: false
-TrimStart: '00:00:00.182'
+TrimStart: '00:00:00.166'
 Scale: true
 ScaleMode: neighbor
 OutResolution: 320x240
@@ -30,9 +30,9 @@ Deadline: 'best'
 Batch: true
 CRFDefault: '20'
 CRF: #batch mode crf
-  # - '50'
+  - '36'
   - '28'
-  # - '20'
+  - '20'
   - '12'
   # - '8'
 
@@ -47,4 +47,4 @@ BatchCodecs:
 CreateImages: true
 
 Debug: true
-SkipEncoding: true
+SkipEncoding: false
