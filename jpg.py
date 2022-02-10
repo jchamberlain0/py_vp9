@@ -29,4 +29,17 @@ def createJpgs(settings):
     # Print the args without the brackets and commas
     print(arg, end=" ", flush=True)
 
+  if settings['SkipEncoding']:
+    print('skipping image extraction.')
+    return True
+  
+  t1 = time.localtime()
+  # current_time = time.strftime("%H:%M:%S", t)
+  # print(current_time)
+  print("\nRunning jpeg extraction: "+ time.strftime("%H:%M:%S", t1))
+
+  if not settings['SkipEncoding']:
+    commandResult = subprocess.run(jpg, capture_output=True)
+  print(commandResult)
+
   return True
