@@ -23,23 +23,27 @@ import time
 def createJpgs(settings):
 
 # ffmpeg -i input.mov -r 60/1 out%04d.jpg
-  jpg = ['ffmpeg','i',settings['InputFileDir']+settings['InputFilename']+settings['InputExtension'],'-r','zgv%04d.jpg']
+  # jpg = ['ffmpeg','i',settings['InputFileDir']+settings['InputFilename']+settings['InputExtension'],'-r',settings['OutFileDir']+settings['NewOutputFolder']+'/images/'+'zgv%04d.jpg']
+  jpg = ['ffmpeg','-i',settings['InputFileDir']+settings['InputFilename']+settings['InputExtension'],'-vf', 'fps=60', settings['OutFileDir']+settings['NewOutputFolder']+'/images/'+'zgv%04d.png']
+  # jpg = ['ffmpeg','-i',settings['InputFileDir']+settings['InputFilename']+settings['InputExtension'], '-r', '1:1', settings['OutFileDir']+settings['NewOutputFolder']+'/images/'+'$filename%04d.bmp']
 
   for arg in jpg:
     # Print the args without the brackets and commas
     print(arg, end=" ", flush=True)
 
-  if settings['SkipEncoding']:
-    print('skipping image extraction.')
-    return True
+  # if settings['SkipEncoding']:
+  #   print('skipping image extraction.')
+  #   return True
   
   t1 = time.localtime()
   # current_time = time.strftime("%H:%M:%S", t)
   # print(current_time)
   print("\nRunning jpeg extraction: "+ time.strftime("%H:%M:%S", t1))
 
-  if not settings['SkipEncoding']:
-    commandResult = subprocess.run(jpg, capture_output=True)
+  # if not settings['SkipEncoding']:
+  #   commandResult = subprocess.run(jpg, capture_output=True)
+  #   print(commandResult)
+  commandResult = subprocess.run(jpg, capture_output=True)
   print(commandResult)
 
   return True
