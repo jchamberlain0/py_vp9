@@ -27,6 +27,8 @@ def createJpgs(settings):
   jpg = ['ffmpeg','-i',settings['InputFileDir']+settings['InputFilename']+settings['InputExtension'],'-vf', 'fps=60', '-vf', 'scale=320x240','-sws_flags','neighbor', settings['OutFileDir']+settings['NewOutputFolder']+'/images/'+'zgv%04d.png']
   # jpg = ['ffmpeg','-i',settings['InputFileDir']+settings['InputFilename']+settings['InputExtension'], '-r', '1:1', settings['OutFileDir']+settings['NewOutputFolder']+'/images/'+'$filename%04d.bmp']
 
+  # montage zgv0392.png zgv0394.png zgv0397.png zgv0400.png zgv0403.png zgv0405.png zgv0408.png zgv0411.png zgv0415.png zgv0418.png zgv0422.png zgv0424.png -geometry +0+0 montage_geom2.png
+
   for arg in jpg:
     # Print the args without the brackets and commas
     print(arg, end=" ", flush=True)
