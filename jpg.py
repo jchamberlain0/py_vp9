@@ -24,7 +24,7 @@ def createJpgs(settings):
 
 # ffmpeg -i input.mov -r 60/1 out%04d.jpg
   # jpg = ['ffmpeg','i',settings['InputFileDir']+settings['InputFilename']+settings['InputExtension'],'-r',settings['OutFileDir']+settings['NewOutputFolder']+'/images/'+'zgv%04d.jpg']
-  jpg = ['ffmpeg','-i',settings['InputFileDir']+settings['InputFilename']+settings['InputExtension'],'-vf', 'fps=60', settings['OutFileDir']+settings['NewOutputFolder']+'/images/'+'zgv%04d.png']
+  jpg = ['ffmpeg','-i',settings['InputFileDir']+settings['InputFilename']+settings['InputExtension'],'-vf', 'fps=60', '-vf', 'scale=320x240','-sws_flags','neighbor', settings['OutFileDir']+settings['NewOutputFolder']+'/images/'+'zgv%04d.png']
   # jpg = ['ffmpeg','-i',settings['InputFileDir']+settings['InputFilename']+settings['InputExtension'], '-r', '1:1', settings['OutFileDir']+settings['NewOutputFolder']+'/images/'+'$filename%04d.bmp']
 
   for arg in jpg:
