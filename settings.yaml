@@ -2,19 +2,19 @@
 InputFileDir: C:/video/lossless/
 # InputFileDir: C:/video/releaseOBS/
 # InputFilename: 2021-10-26_18-46-11
-InputFilename: 2022-02-09_19-36-31
+InputFilename: 2022-02-10_20-06-12
 # InputExtension: '.mp4'
 InputExtension: '.avi'
 
 OutFileDir: C:/video/
-NewOutputFolder: 'kokiri-bridge-hover8'
+NewOutputFolder: 'water-bk-skip'
 OutputExtension: '.webm'
 # OutputCodec: 'libvpx'
 OutputCodec: 'libvpx-vp9'
 
 StripAudio: false
 TrimVideo: false
-TrimStart: '00:00:00.166'
+TrimStart: '00:00:00.216'
 Scale: true
 ScaleMode: neighbor
 OutResolution: 320x240
@@ -41,11 +41,11 @@ BatchOutputResolutions:
   - '320x240'
 
 BatchCodecs:
-  - 'libvpx'
+  # - 'libvpx'
   - 'libvpx-vp9'
 
 CreateImages: true
 
 Debug: true
-SkipEncoding: true
+SkipEncoding: false
 SkipImages: false
