@@ -7,7 +7,7 @@ InputFilename: 2022-02-10_20-06-12
 InputExtension: '.avi'
 
 OutFileDir: C:/video/
-NewOutputFolder: 'water-bk-skip'
+NewOutputFolder: 'watertemple-bk-color-test10'
 OutputExtension: '.webm'
 # OutputCodec: 'libvpx'
 OutputCodec: 'libvpx-vp9'
@@ -30,10 +30,10 @@ Deadline: 'best'
 Batch: true
 CRFDefault: '20'
 CRF: #batch mode crf
-  - '36'
-  - '28'
+  # - '36'
+  - '30'
   - '20'
-  - '12'
+  # - '12'
   # - '8'
 
 BatchOutputResolutions:
