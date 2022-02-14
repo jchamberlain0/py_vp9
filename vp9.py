@@ -37,6 +37,10 @@ def encodeVP9(crf, settings):
     firstPass.append("-deadline")
     firstPass.append(settings['Deadline'])
 
+  firstPass.append('-pix_fmt')
+  firstPass.append('yuv444p')
+
+
   if settings['Scale']:
     # These args will be omitted entirely if Scale is false.
     # TODO: make the horizontallines logic more robust, it will fail on 4-digit resolutions.
@@ -55,6 +59,10 @@ def encodeVP9(crf, settings):
   firstPass.append("0")
   firstPass.append("-crf")
   firstPass.append(crf)
+
+  # firstPass.append('-profile:v')
+  # firstPass.append('1')
+
   firstPass.append("-pass")
   firstPass.append("1")
   firstPass.append("-f")
@@ -75,6 +83,10 @@ def encodeVP9(crf, settings):
   if settings['UseDeadline']:
     secondPass.append("-deadline")
     secondPass.append(settings['Deadline'])
+  
+  secondPass.append('-pix_fmt')
+  secondPass.append('yuv444p')
+  
 
   if settings['Scale']:
     secondPass.append("-vf")
@@ -96,6 +108,9 @@ def encodeVP9(crf, settings):
   else:
     # Batch mode passes CRF in.
     secondPass.append(crf)
+  
+  # secondPass.append('-profile:v')
+  # secondPass.append('1')
   
   secondPass.append("-pass")
   secondPass.append("2")
