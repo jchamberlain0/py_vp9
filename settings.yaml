@@ -1,22 +1,54 @@
 ---
-InputFileDir: C:/video/releaseOBS/
-InputFilename: 2021-10-26_18-46-11
-InputExtension: '.mp4'
+InputFileDir: C:/video/lossless/
+# InputFileDir: C:/video/releaseOBS/
+# InputFilename: 2021-10-26_18-46-11
+InputFilename: 2022-02-21_21-07-59
+# InputExtension: '.mp4'
+InputExtension: '.avi'
+
 OutFileDir: C:/video/
+NewOutputFolder: 'example-video'
 OutputExtension: '.webm'
+# OutputCodec: 'libvpx'
+OutputCodec: 'libvpx-vp9'
+
+StripAudio: false
+TrimVideo: true
+TrimStart: '00:00:00.149'
 Scale: true
-OutResolution: 640x480
+ScaleMode: neighbor
+# OutResolution: 320x240
+OutResolution: 320x240
+# OutResolution: 320x240
 # OutResolution: 640x480
 # OutResolution: 960x720
 # OutResolution: 1280x960
-ScaleMode: lanczos
-Batch: false
-CRFDefault: '26'
-CRF:
-  - '50'
-  - '30'
-  - '20'
-  - '12'
-  - '8'
+
+UseDeadline: false
+Deadline: 'best'
+# Deadline: 'good'
+
+Batch: true
+CRFDefault: '20'
+CRF: #batch mode crf
+  - '48'
+  - '42'
+  - '36'
+  # - '30'
+  - '26'
+  - '14'
+  # - '8'
+
+BatchOutputResolutions:
+  - 'default'
+  - '320x240'
+
+BatchCodecs:
+  # - 'libvpx'
+  - 'libvpx-vp9'
+
+CreateImages: true
+
 Debug: true
 SkipEncoding: false
+SkipImages: false
