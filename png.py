@@ -19,7 +19,8 @@ import time
 # Output one image every ten minutes:
 # ffmpeg -i input.mov -vf fps=1/600 out%04d.jpg
 
-def createJpgs(settings):
+def createPngs(settings):
+  # Output a png file for every frame in the source video.
 
   command = ['ffmpeg','-i']
 

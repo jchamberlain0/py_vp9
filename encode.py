@@ -5,7 +5,7 @@ import time
 import vp9
 import os
 import sys
-import jpg
+import png
 
 with open("settings.yaml", 'r') as stream:
     settings = yaml.safe_load(stream)
@@ -22,7 +22,7 @@ os.mkdir(settings['OutFileDir']+settings['NewOutputFolder']+'/images')
 modSettings = settings
 
 if settings['CreateImages']:
-  if jpg.createJpgs(settings):
+  if png.createPngs(settings):
     print('Saved images.. Maybe.')
 
 if settings['Debug']:
