@@ -19,53 +19,33 @@ import time
 # Output one image every ten minutes:
 # ffmpeg -i input.mov -vf fps=1/600 out%04d.jpg
 
-
 def createJpgs(settings):
 
-  # return True
-
-# ffmpeg -i input.mov -r 60/1 out%04d.jpg
-  # jpg = ['ffmpeg','i',settings['InputFileDir']+settings['InputFilename']+settings['InputExtension'],'-r',settings['OutFileDir']+settings['NewOutputFolder']+'/images/'+'zgv%04d.jpg']
-  # jpg = ['ffmpeg','-i',settings['InputFileDir']+settings['InputFilename']+settings['InputExtension'], '-r', '1:1', settings['OutFileDir']+settings['NewOutputFolder']+'/images/'+'$filename%04d.bmp']
-
-  ## export jpgs
   command = ['ffmpeg','-i']
 
   command.append(settings['InputFileDir']+settings['InputFilename']+settings['InputExtension'])
   command.append('-vf')
   command.append('fps=60')
-  command.append('-vf')
-  command.append('format=gray')
+  # command.append('-vf')
+  # command.append('format=gray')
 
   command.append('-vf')
   command.append('scale=320x240')
   command.append('-sws_flags')
   command.append('neighbor')
   command.append(settings['OutFileDir']+settings['NewOutputFolder']+'/images/'+'zgv%04d.png')
-  # jpg = ['ffmpeg','-i',settings['InputFileDir']+settings['InputFilename']+settings['InputExtension'],'-vf', 'fps=60', settings['OutFileDir']+settings['NewOutputFolder']+'/images/'+'zgv%04d.png']
-
-  
-
-  # montage zgv0392.png zgv0394.png zgv0397.png zgv0400.png zgv0403.png zgv0405.png zgv0408.png zgv0411.png zgv0415.png zgv0418.png zgv0422.png zgv0424.png -geometry +0+0 montage_geom2.png
 
   for arg in command:
     # Print the args without the brackets and commas
     print(arg, end=" ", flush=True)
 
-  # if settings['SkipEncoding']:
-  #   print('skipping image extraction.')
-  #   return True
+  if settings['SkipImages']:
+    return True
   
   t1 = time.localtime()
-  # current_time = time.strftime("%H:%M:%S", t)
-  # print(current_time)
   print("\nRunning jpeg extraction: "+ time.strftime("%H:%M:%S", t1))
 
-  # if not settings['SkipEncoding']:
-  #   commandResult = subprocess.run(jpg, capture_output=True)
-  #   print(commandResult)
   commandResult = subprocess.run(command, capture_output=True)
   print(commandResult)
 
   return True
-
