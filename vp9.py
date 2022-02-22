@@ -12,7 +12,11 @@ def encodeVP9(crf, settings):
   secondPass = ['ffmpeg']
 
   # Used to denote scaled resolution in output file
-  horizontalLines = "noscale"
+  horizontalLines = "480"
+  if settings['Scale']:
+    # These args will be omitted entirely if Scale is false.
+    # TODO: make the horizontallines logic more robust, it will fail on 4-digit resolutions.
+    horizontalLines = settings['OutResolution'][4:7]
 
   # Check if a CRF value was passed in - this will be used by batch mode.
   if crf == "defaultCRF":
@@ -37,14 +41,14 @@ def encodeVP9(crf, settings):
     firstPass.append("-deadline")
     firstPass.append(settings['Deadline'])
 
-  firstPass.append('-pix_fmt')
-  firstPass.append('yuv444p')
+  
+  if settings['Scale']:
+    # todo - see below.
+    firstPass.append('-pix_fmt')
+    firstPass.append('yuv444p')
 
 
   if settings['Scale']:
-    # These args will be omitted entirely if Scale is false.
-    # TODO: make the horizontallines logic more robust, it will fail on 4-digit resolutions.
-    horizontalLines = settings['OutResolution'][4:7]
     firstPass.append("-vf")
     firstPass.append("scale="+settings['OutResolution'])
     firstPass.append("-sws_flags")
@@ -84,8 +88,12 @@ def encodeVP9(crf, settings):
     secondPass.append("-deadline")
     secondPass.append(settings['Deadline'])
   
-  secondPass.append('-pix_fmt')
-  secondPass.append('yuv444p')
+
+  if settings['Scale']:
+    # todo- make a setting for this.
+    # typically you only care about perfect chroma for 240p, but 480 does look a tiny bit better with perfect chroma too.
+    secondPass.append('-pix_fmt')
+    secondPass.append('yuv444p')
   
 
   if settings['Scale']:
@@ -121,7 +129,15 @@ def encodeVP9(crf, settings):
 
   if settings['StripAudio']:
     secondPass.append("-an")
-  secondPass.append(settings['OutFileDir']+settings['NewOutputFolder']+"/"+settings['InputFilename']+"_"+settings['OutputCodec']+"_crf"+crf+"_"+horizontalLines+settings['OutputExtension'])
+  # secondPass.append(settings['OutFileDir']+settings['NewOutputFolder']+"/"+settings['InputFilename']+"_"+settings['OutputCodec']+"_crf"+crf+"_"+horizontalLines+settings['OutputExtension'])
+
+  
+  succinctCodec = settings['OutputCodec']
+  if settings['OutputCodec'] == 'libvpx-vp9':
+    succinctCodec = 'vp9'
+
+
+  secondPass.append(settings['OutFileDir']+settings['NewOutputFolder']+"/zgv_n64_"+succinctCodec+"_"+horizontalLines+"_crf"+crf+settings['OutputExtension'])
   
 
   commandResult = ''
