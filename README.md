@@ -4,9 +4,9 @@ Encode high efficiency video for web, using [ffmpeg](https://ffmpeg.org/) and [l
 
 ### Features
 - **File**: Transcode a video to a single vp9 video file.
-	- Default crf: 30
+	- Default crf: 36
 - **Batch**: Transcode a video to multiple vp9 files, at user-defined quality thresholds. This is useful for providing users with quality options.
-	- Default crf values: 50, 30, 20, 12, 8
+	- Default crf values: 48, 42, 36, 28, 14
 
 ### Get started
 
@@ -47,13 +47,15 @@ Encode:
 
 <br>
 
-### Encoding details
+### Encoding features
 - Two-pass.
 - Optional downscaling by integer with lanczos (`1280x920` -> `640x480`).
 - libvpx-vp9 encoding. From the [ffmpeg docs](https://trac.ffmpeg.org/wiki/Encode/VP9):
   >libvpx-vp9 can save about 20–50% bitrate compared to libx264 (the default H.264 encoder), while retaining the same visual quality.
 - Variable bitrate switch `-b:v` is set to 0, because the high quality use case prefers that image quality is not variable.
 - Constant rate factor switch `-crf` is set by the user to achieve the desired consistent image quality across the length of the video. Good defaults are between 8 and 30, but more research is needed.
+- Optional 4:4:4 chroma to preserve color information for in-browser rendering.
+- `-deadline` optional setting to improve IQ even further when appropriate.
 
 <br>
 
@@ -61,4 +63,3 @@ Encode:
 - Improve workflow by starting the encode without needing to copy/paste filenames. Drag & drop?
 - AV1 encoding with rav1e, when it has better support
 - `Folder` mode: Transcode all items inside a single folder, with or without batch mode.
-- `-deadline` and `-cpu-used` arguments to further optimize IQ
