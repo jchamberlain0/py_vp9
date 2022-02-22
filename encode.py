@@ -7,13 +7,9 @@ import os
 import sys
 import jpg
 
-# TODO: write another script that strips audio instead of re-encoding a bunch of files in batch mode.
-
-
 with open("settings.yaml", 'r') as stream:
     settings = yaml.safe_load(stream)
 
-# os.mkdir('C:/video/charles')
 try:
   os.mkdir(settings['OutFileDir']+settings['NewOutputFolder'])
 except FileExistsError:
@@ -21,12 +17,8 @@ except FileExistsError:
   sys.exit("Exiting")
 
 os.mkdir(settings['OutFileDir']+settings['NewOutputFolder']+'/images')
-# except FileExistsError:
-#   print("NewOutputFolder \""+ settings['NewOutputFolder'] +"\" already exists. This isn't a bug, it's a feature to help keep your folders clean :)")
-#   sys.exit("Exiting")
 
 # settings copy that can be mutated to allow multiple results in single-encode context.
-# likely unnecessary but is currently saving me a headache
 modSettings = settings
 
 if settings['CreateImages']:
@@ -80,5 +72,5 @@ else:
   print('\n\nThere was an issue with encoding. Press Enter to continue...')
 
 # wait for user input. this makes it so the output doesn't
-# dissapear immediately when invoking by clicking on the script.
+# dissapear immediately when invoking outside the CLI.
 input()
