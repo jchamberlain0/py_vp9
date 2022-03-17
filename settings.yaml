@@ -1,28 +1,23 @@
 ---
 InputFileDir: C:/video/lossless/
 # InputFileDir: C:/video/releaseOBS/
-# InputFilename: 2021-10-26_18-46-11
-InputFilename: 2022-02-21_21-07-59
+InputFilename: 2022-02-24_21-11-45
 # InputExtension: '.mp4'
 InputExtension: '.avi'
 
 OutFileDir: C:/video/
-NewOutputFolder: 'example-video'
+NewOutputFolder: 'down-a'
 OutputExtension: '.webm'
 # OutputCodec: 'libvpx'
 OutputCodec: 'libvpx-vp9'
 
 StripAudio: false
 TrimVideo: true
-TrimStart: '00:00:00.149'
+TrimStart: '00:00:00.116'
 Scale: true
 ScaleMode: neighbor
-# OutResolution: 320x240
 OutResolution: 320x240
-# OutResolution: 320x240
 # OutResolution: 640x480
-# OutResolution: 960x720
-# OutResolution: 1280x960
 
 UseDeadline: false
 Deadline: 'best'
