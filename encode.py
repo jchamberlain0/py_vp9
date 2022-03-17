@@ -4,17 +4,34 @@ import pprint
 import time
 import vp9
 import os
+import shutil
 import sys
 import png
 
 with open("settings.yaml", 'r') as stream:
-    settings = yaml.safe_load(stream)
+  settings = yaml.safe_load(stream)
+
+targetDir = settings['OutFileDir']+settings['NewOutputFolder']
+
 
 try:
-  os.mkdir(settings['OutFileDir']+settings['NewOutputFolder'])
+  print('creating output folder '+settings['NewOutputFolder'])
+  os.mkdir(targetDir)
 except FileExistsError:
-  print("NewOutputFolder \""+ settings['NewOutputFolder'] +"\" already exists. This isn't a bug, it's a feature to help keep your folders clean :)")
+  print("Output folder \""+ settings['NewOutputFolder'] +"\" already exists. This check helps keep your folders clean :)")
   sys.exit("Exiting")
+
+# shutil.copyfile(os.path.dirname(os.path.realpath('settings.yaml')),settings['OutFileDir']+settings['NewOutputFolder']+"py_vp9.yaml")
+
+# Copy settings to new target dir
+shutil.copyfile('settings.yaml',targetDir+'/py_vp9.yaml')
+
+# other method to export settings.. This does not preserve line order, but it does strip comments...
+# print(targetDir)
+# settingsDump = open(targetDir+'py_vp9.yaml','w')
+# yaml.dump(settings,settingsDump)
+# settingsDump.close()
+# with open()
 
 os.mkdir(settings['OutFileDir']+settings['NewOutputFolder']+'/images')
 
