@@ -33,6 +33,9 @@ def encodeVP9(crf, settings):
     if settings['TrimStart']:
       firstPass.append("-ss")
       firstPass.append(str(settings['TrimStart']))
+    if settings['TrimVideoEnd']:
+      firstPass.append("-to")
+      firstPass.append(str(settings['TrimEnd']))
 
   firstPass.append("-i")
   firstPass.append(settings['InputFileDir']+settings['InputFilename']+settings['InputExtension'])
@@ -79,6 +82,9 @@ def encodeVP9(crf, settings):
     if settings['TrimStart']:
       secondPass.append("-ss")
       secondPass.append(str(settings['TrimStart']))
+    if settings['TrimVideoEnd']:
+      secondPass.append("-to")
+      secondPass.append(str(settings['TrimEnd']))
 
   # Build Second Pass
   secondPass.append("-i")
