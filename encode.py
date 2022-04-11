@@ -18,7 +18,7 @@ try:
   print('creating output folder '+settings['NewOutputFolder'])
   os.mkdir(targetDir)
 except FileExistsError:
-  print("Output folder \""+ settings['NewOutputFolder'] +"\" already exists. This check helps keep your folders clean :)")
+  print("Output folder \""+ settings['NewOutputFolder'] +"\" already exists. Please rename output directory to avoid losing work.")
   sys.exit("Exiting")
 
 # shutil.copyfile(os.path.dirname(os.path.realpath('settings.yaml')),settings['OutFileDir']+settings['NewOutputFolder']+"py_vp9.yaml")
