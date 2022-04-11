@@ -46,9 +46,9 @@ def encodeVP9(crf, settings):
 
   
   if settings['Scale']:
-    # todo - see below.
-    firstPass.append('-pix_fmt')
-    firstPass.append('yuv444p')
+    if settings['SetPixelFormatWhenScaling']:
+      firstPass.append('-pix_fmt')
+      firstPass.append(settings['PixelFormat'])
 
 
   if settings['Scale']:
@@ -96,10 +96,9 @@ def encodeVP9(crf, settings):
   
 
   if settings['Scale']:
-    # todo- make a setting for this.
-    # typically you only care about perfect chroma for 240p, but 480 does look a tiny bit better with perfect chroma too.
-    secondPass.append('-pix_fmt')
-    secondPass.append('yuv444p')
+    if settings['SetPixelFormatWhenScaling']:
+      secondPass.append('-pix_fmt')
+      secondPass.append(settings['PixelFormat'])
   
 
   if settings['Scale']:
@@ -141,9 +140,18 @@ def encodeVP9(crf, settings):
   succinctCodec = settings['OutputCodec']
   if settings['OutputCodec'] == 'libvpx-vp9':
     succinctCodec = 'vp9'
+  
+  succinctPxFmt = '_420'
+  if settings['Scale']:
+    if settings['SetPixelFormatWhenScaling']:
+      if settings['PixelFormat'] == 'yuv444p':
+        succinctPxFmt = '_444'
 
 
-  secondPass.append(settings['OutFileDir']+settings['NewOutputFolder']+"/zgv_n64_"+succinctCodec+"_"+horizontalLines+"_crf"+crf+settings['OutputExtension'])
+
+
+
+  secondPass.append(settings['OutFileDir']+settings['NewOutputFolder']+"/zgv_n64_"+succinctCodec+"_"+horizontalLines+succinctPxFmt+"_crf"+crf+settings['OutputExtension'])
   
 
   commandResult = ''

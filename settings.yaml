@@ -1,19 +1,19 @@
 ---
 InputFileDir: C:/video/lossless/
 # InputFileDir: C:/video/releaseOBS/
-InputFilename: 2022-04-05_21-31-13
+InputFilename: 2022-02-05_16-36-58
 # InputExtension: '.mp4'
 InputExtension: '.avi'
 
 OutFileDir: C:/video/
-NewOutputFolder: 'output'
+NewOutputFolder: 'hf-redo2'
 OutputExtension: '.webm'
 # OutputCodec: 'libvpx'
 OutputCodec: 'libvpx-vp9'
 
-StripAudio: true
-TrimVideo: false
-TrimStart: '00:00:00.000'
+StripAudio: false
+TrimVideo: true
+TrimStart: '00:00:00.186'
 TrimVideoEnd: false
 TrimEnd: '00:00:00.000'
 
@@ -22,6 +22,10 @@ ScaleMode: neighbor
 OutResolution: 320x240
 # OutResolution: 640x480
 
+SetPixelFormatWhenScaling: true
+PixelFormat: yuv444p
+# PixelFormat: yuv420p
+
 UseDeadline: false
 Deadline: 'best'
 # Deadline: 'good'
@@ -29,13 +33,12 @@ Deadline: 'best'
 Batch: true
 CRFDefault: '20'
 CRF: #batch mode crf
-  # - '48'
-  # - '42'
-  # - '36'
-  # - '30'
-  # - '26'
-  - '14'
-  - '8'
+  - '50'
+  - '40'
+  - '30'
+  - '20'
+  - '10'
+  # - '0'
 
 BatchOutputResolutions:
   - 'default'
