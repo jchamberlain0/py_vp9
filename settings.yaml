@@ -1,19 +1,19 @@
 ---
 InputFileDir: C:/video/lossless/
 # InputFileDir: C:/video/releaseOBS/
-InputFilename: 2022-02-05_16-36-58
+InputFilename: 2022-04-11_20-09-20
 # InputExtension: '.mp4'
 InputExtension: '.avi'
 
-OutFileDir: C:/video/
-NewOutputFolder: 'hf-redo2'
+OutFileDir: C:/video/py_vp9/
+NewOutputFolder: 'chamber-sages-hexagon'
 OutputExtension: '.webm'
 # OutputCodec: 'libvpx'
 OutputCodec: 'libvpx-vp9'
 
 StripAudio: false
-TrimVideo: true
-TrimStart: '00:00:00.186'
+TrimVideo: false
+TrimStart: '00:00:00.000'
 TrimVideoEnd: false
 TrimEnd: '00:00:00.000'
 
@@ -41,7 +41,7 @@ CRF: #batch mode crf
   # - '0'
 
 BatchOutputResolutions:
-  - 'default'
+  # - 'default'
   - '320x240'
   # - '313x237'
 
