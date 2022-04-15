@@ -33,12 +33,13 @@ shutil.copyfile('settings.yaml',targetDir+'/py_vp9.yaml')
 # settingsDump.close()
 # with open()
 
-os.mkdir(settings['OutFileDir']+settings['NewOutputFolder']+'/images')
+
 
 # settings copy that can be mutated to allow multiple results in single-encode context.
 modSettings = settings
 
 if settings['CreateImages']:
+  os.mkdir(settings['OutFileDir']+settings['NewOutputFolder']+'/images')
   if png.createPngs(settings):
     print('Saved images.. Maybe.')
 
