@@ -60,24 +60,27 @@ if settings['Batch']:
     modSettings['OutputCodec'] = Codec
 
     for OutputResolution in settings['BatchOutputResolutions']:
-      
-      # default output resolution means don't scale.
-      if OutputResolution == 'default':
-        modSettings['Scale'] = False
-      else:
-        # set the resolution for these encodes.
-        modSettings['Scale'] = True
-        modSettings['OutResolution'] = OutputResolution 
 
-      for crf in settings['CRF']:
-        time.sleep(1)
-        result = vp9.encodeVP9(crf,modSettings) # Pass in the modified settings.
-        if result == True:
-          print('Finished encode for crf '+crf)
-          filesEncoded = filesEncoded+1
-        if result != True:
-          print("\nAn issue was encountered while encoding file with crf "+crf+". Stopping batch mode.")
-          break
+      for PixelFormat in settings['PixelFormats']:
+        modSettings['PixelFormat'] = PixelFormat
+      
+        # default output resolution means don't scale.
+        if OutputResolution == 'default':
+          modSettings['Scale'] = False
+        else:
+          # set the resolution for these encodes.
+          modSettings['Scale'] = True
+          modSettings['OutResolution'] = OutputResolution 
+
+        for crf in settings['CRF']:
+          time.sleep(1)
+          result = vp9.encodeVP9(crf,modSettings) # Pass in the modified settings.
+          if result == True:
+            print('Finished encode for crf '+crf)
+            filesEncoded = filesEncoded+1
+          if result != True:
+            print("\nAn issue was encountered while encoding file with crf "+crf+". Stopping batch mode.")
+            break
 else:
   # Pass a flag to the vp9 encoding function instead of a value
   result = vp9.encodeVP9("defaultCRF",settings)
