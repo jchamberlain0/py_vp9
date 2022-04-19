@@ -1,19 +1,19 @@
 ---
 InputFileDir: C:/video/lossless/
 # InputFileDir: C:/video/releaseOBS/
-InputFilename: 2022-04-11_20-09-20
+InputFilename: 2022-04-18_19-13-52
 # InputExtension: '.mp4'
 InputExtension: '.avi'
 
 OutFileDir: C:/video/py_vp9/
-NewOutputFolder: 'chamber-sages-hexagon'
+NewOutputFolder: 'escape-remake'
 OutputExtension: '.webm'
 # OutputCodec: 'libvpx'
 OutputCodec: 'libvpx-vp9'
 
 StripAudio: false
 TrimVideo: false
-TrimStart: '00:00:00.000'
+TrimStart: '00:00:00.215'
 TrimVideoEnd: false
 TrimEnd: '00:00:00.000'
 
@@ -22,9 +22,11 @@ ScaleMode: neighbor
 OutResolution: 320x240
 # OutResolution: 640x480
 
-SetPixelFormatWhenScaling: true
 PixelFormat: yuv444p
-# PixelFormat: yuv420p
+SetPixelFormat: true
+PixelFormats:
+  - 'yuv444p'
+  - 'yuv420p'
 
 UseDeadline: false
 Deadline: 'best'
@@ -41,7 +43,7 @@ CRF: #batch mode crf
   # - '0'
 
 BatchOutputResolutions:
-  # - 'default'
+  - 'default'
   - '320x240'
   # - '313x237'
 
@@ -49,8 +51,8 @@ BatchCodecs:
   # - 'libvpx'
   - 'libvpx-vp9'
 
-CreateImages: true
+CreateImages: false
 
 Debug: true
 SkipEncoding: false
-SkipImages: false
+SkipImages: true

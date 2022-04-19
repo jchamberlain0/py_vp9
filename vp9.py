@@ -44,11 +44,9 @@ def encodeVP9(crf, settings):
     firstPass.append("-deadline")
     firstPass.append(settings['Deadline'])
 
-  
-  if settings['Scale']:
-    if settings['SetPixelFormatWhenScaling']:
-      firstPass.append('-pix_fmt')
-      firstPass.append(settings['PixelFormat'])
+  if settings['SetPixelFormat']:
+    firstPass.append('-pix_fmt')
+    firstPass.append(settings['PixelFormat'])
 
 
   if settings['Scale']:
@@ -95,10 +93,9 @@ def encodeVP9(crf, settings):
     secondPass.append(settings['Deadline'])
   
 
-  if settings['Scale']:
-    if settings['SetPixelFormatWhenScaling']:
-      secondPass.append('-pix_fmt')
-      secondPass.append(settings['PixelFormat'])
+  if settings['SetPixelFormat']:
+    secondPass.append('-pix_fmt')
+    secondPass.append(settings['PixelFormat'])
   
 
   if settings['Scale']:
@@ -142,13 +139,10 @@ def encodeVP9(crf, settings):
     succinctCodec = 'vp9'
   
   succinctPxFmt = '_420'
-  if settings['Scale']:
-    if settings['SetPixelFormatWhenScaling']:
-      if settings['PixelFormat'] == 'yuv444p':
-        succinctPxFmt = '_444'
-
-
-
+  if settings['PixelFormat'] == 'yuv444p':
+    succinctPxFmt = '_444'
+  if settings['PixelFormat'] == 'yuv420p':
+    succinctPxFmt = '_420'
 
 
   secondPass.append(settings['OutFileDir']+settings['NewOutputFolder']+"/zgv_n64_"+succinctCodec+"_"+horizontalLines+succinctPxFmt+"_crf"+crf+settings['OutputExtension'])
