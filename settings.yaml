@@ -1,19 +1,19 @@
 ---
 InputFileDir: C:/video/lossless/
 # InputFileDir: C:/video/releaseOBS/
-InputFilename: 2022-04-18_19-13-52
+InputFilename: 2022-04-19_19-55-23
 # InputExtension: '.mp4'
 InputExtension: '.avi'
 
 OutFileDir: C:/video/py_vp9/
-NewOutputFolder: 'escape-remake'
+NewOutputFolder: 'boat-skip-redo-oobs'
 OutputExtension: '.webm'
 # OutputCodec: 'libvpx'
 OutputCodec: 'libvpx-vp9'
 
 StripAudio: false
-TrimVideo: false
-TrimStart: '00:00:00.215'
+TrimVideo: true
+TrimStart: '00:00:00.183'
 TrimVideoEnd: false
 TrimEnd: '00:00:00.000'
 

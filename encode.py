@@ -73,14 +73,22 @@ if settings['Batch']:
           modSettings['OutResolution'] = OutputResolution 
 
         for crf in settings['CRF']:
-          time.sleep(1)
-          result = vp9.encodeVP9(crf,modSettings) # Pass in the modified settings.
-          if result == True:
-            print('Finished encode for crf '+crf)
-            filesEncoded = filesEncoded+1
-          if result != True:
-            print("\nAn issue was encountered while encoding file with crf "+crf+". Stopping batch mode.")
-            break
+          time.sleep(0.4)
+
+          # Skipping 480p/4:4:4 encodes for now.
+          print(OutputResolution)
+          print(PixelFormat)
+          if (OutputResolution == 'default' and PixelFormat == 'yuv444p' ):
+            print('Skipping out on 480p/4:4:4 encode.')
+            # continue
+          else:
+            result = vp9.encodeVP9(crf,modSettings) # Pass in the modified settings.
+            if result == True:
+              print('Finished encode for crf '+crf)
+              filesEncoded = filesEncoded+1
+            if result != True:
+              print("\nAn issue was encountered while encoding file with crf "+crf+". Stopping batch mode.")
+              break
 else:
   # Pass a flag to the vp9 encoding function instead of a value
   result = vp9.encodeVP9("defaultCRF",settings)
