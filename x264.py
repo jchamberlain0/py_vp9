@@ -56,16 +56,10 @@ def encodex264(crf, settings):
 
   x264.append("-c:v")
   x264.append(settings['OutputCodec'])
-  x264.append("-b:v")
-  x264.append("0")
+  # x264.append("-b:v")
+  # x264.append("0")
   x264.append("-crf")
   x264.append(crf)
-
-  x264.append("-pass")
-  x264.append("1")
-
-  # TODO: add operating system check so this works on Linux.
-  x264.append("NUL")
   
   succinctCodec = settings['OutputCodec']
   if settings['OutputCodec'] == 'libvpx-vp9':
