@@ -1,15 +1,12 @@
 import subprocess
 import time
 
-# Encode a single video to VP9 with fixed settings provided by the colling function.
-# This function is hard coded to use two-pass because there's no use case not to.
-# For simplicity's sake, the second pass is added in sequence,
-#   rather than trying to modify the first pass arg list or something fancy like that.
-def encodeVP9(crf, settings):
+# Encode a single video to x264 with fixed settings provided by the colling function.
+def encodex264(crf, settings):
+
 
   # List of arguments to pass to ffmpeg
-  firstPass = ['ffmpeg']
-  secondPass = ['ffmpeg']
+  x264 = ['ffmpeg']
 
   # Used to denote scaled resolution in output file
   horizontalLines = "480"
@@ -27,116 +24,54 @@ def encodeVP9(crf, settings):
 
 
   # Build first pass
-  firstPass.append("-y")
+  x264.append("-y")
 
   if settings['TrimVideo']:
     if settings['TrimStart']:
-      firstPass.append("-ss")
-      firstPass.append(str(settings['TrimStart']))
+      x264.append("-ss")
+      x264.append(str(settings['TrimStart']))
     if settings['TrimVideoEnd']:
-      firstPass.append("-to")
-      firstPass.append(str(settings['TrimEnd']))
+      x264.append("-to")
+      x264.append(str(settings['TrimEnd']))
 
-  firstPass.append("-i")
-  firstPass.append(settings['InputFileDir']+settings['InputFilename']+settings['InputExtension'])
+  x264.append("-i")
+  x264.append(settings['InputFileDir']+settings['InputFilename']+settings['InputExtension'])
 
   if settings['UseDeadline']:
-    firstPass.append("-deadline")
-    firstPass.append(settings['Deadline'])
+    x264.append("-deadline")
+    x264.append(settings['Deadline'])
 
   if settings['SetPixelFormat']:
-    firstPass.append('-pix_fmt')
-    firstPass.append(settings['PixelFormat'])
+    x264.append('-pix_fmt')
+    x264.append(settings['PixelFormat'])
 
 
   if settings['Scale']:
-    firstPass.append("-vf")
-    firstPass.append("scale="+settings['OutResolution'])
-    firstPass.append("-sws_flags")
-    firstPass.append(settings['ScaleMode'])
+    x264.append("-vf")
+    x264.append("scale="+settings['OutResolution'])
+    x264.append("-sws_flags")
+    x264.append(settings['ScaleMode'])
   
 
 
-  firstPass.append("-c:v")
-  # firstPass.append("libvpx-vp9")
-  firstPass.append(settings['OutputCodec'])
-  firstPass.append("-b:v")
-  firstPass.append("0")
-  firstPass.append("-crf")
-  firstPass.append(crf)
+  x264.append("-c:v")
+  x264.append(settings['OutputCodec'])
+  x264.append("-b:v")
+  x264.append("0")
+  x264.append("-crf")
+  x264.append(crf)
 
-  # firstPass.append('-profile:v')
-  # firstPass.append('1')
-
-  firstPass.append("-pass")
-  firstPass.append("1")
-  firstPass.append("-f")
-  firstPass.append("webm")
+  x264.append("-pass")
+  x264.append("1")
 
   # TODO: add operating system check so this works on Linux.
-  firstPass.append("NUL")
-
-  if settings['TrimVideo']:
-    if settings['TrimStart']:
-      secondPass.append("-ss")
-      secondPass.append(str(settings['TrimStart']))
-    if settings['TrimVideoEnd']:
-      secondPass.append("-to")
-      secondPass.append(str(settings['TrimEnd']))
-
-  # Build Second Pass
-  secondPass.append("-i")
-  secondPass.append(settings['InputFileDir']+settings['InputFilename']+settings['InputExtension'])
-
-  if settings['UseDeadline']:
-    secondPass.append("-deadline")
-    secondPass.append(settings['Deadline'])
-  
-
-  if settings['SetPixelFormat']:
-    secondPass.append('-pix_fmt')
-    secondPass.append(settings['PixelFormat'])
-  
-
-  if settings['Scale']:
-    secondPass.append("-vf")
-    secondPass.append("scale="+settings['OutResolution'])
-    secondPass.append("-sws_flags")
-    secondPass.append(settings['ScaleMode'])
-  
-  secondPass.append("-c:v")
-  secondPass.append(settings['OutputCodec'])
-  secondPass.append("-b:v")
-  secondPass.append("0")
-  secondPass.append("-crf")
-
-  # Check if a CRF value was passed in - this will be used by batch mode.
-  # TODO: this block is redundant!!
-  if crf == "defaultCRF":
-    # Single encode mode uses the CRF from settings.
-    secondPass.append(settings['CRFDefault'])
-  else:
-    # Batch mode passes CRF in.
-    secondPass.append(crf)
-  
-  # secondPass.append('-profile:v')
-  # secondPass.append('1')
-  
-  secondPass.append("-pass")
-  secondPass.append("2")
-  secondPass.append("-c:a")
-  secondPass.append("libopus")
-  # secondPass.append("-acodec")
-  # secondPass.append("copy")
-
-  if settings['StripAudio']:
-    secondPass.append("-an")
-  # secondPass.append(settings['OutFileDir']+settings['NewOutputFolder']+"/"+settings['InputFilename']+"_"+settings['OutputCodec']+"_crf"+crf+"_"+horizontalLines+settings['OutputExtension'])
-
+  x264.append("NUL")
   
   succinctCodec = settings['OutputCodec']
   if settings['OutputCodec'] == 'libvpx-vp9':
     succinctCodec = 'vp9'
+  elif settings['OutputCodec'] == 'libx264':
+    succinctCodec = 'x264'
   
   succinctPxFmt = '_420'
   if settings['PixelFormat'] == 'yuv444p':
@@ -145,7 +80,7 @@ def encodeVP9(crf, settings):
     succinctPxFmt = '_420'
 
 
-  secondPass.append(settings['OutFileDir']+settings['NewOutputFolder']+"/zgv_n64_"+succinctCodec+"_"+horizontalLines+succinctPxFmt+"_crf"+crf+settings['OutputExtension'])
+  x264.append(settings['OutFileDir']+settings['NewOutputFolder']+"/zgv_n64_"+succinctCodec+"_"+horizontalLines+succinctPxFmt+"_crf"+crf+settings['OutputExtension'])
   
 
   commandResult = ''
@@ -154,27 +89,16 @@ def encodeVP9(crf, settings):
   t1 = time.localtime()
   # current_time = time.strftime("%H:%M:%S", t)
   # print(current_time)
-  print("\nRunning first pass: "+ time.strftime("%H:%M:%S", t1))
+  print("\nEncoding x264: "+ time.strftime("%H:%M:%S", t1))
 
   # print(current_time)
-  for arg in firstPass:
+  for arg in x264:
     # Print the args without the brackets and commas
     print(arg, end=" ", flush=True)
   if not settings['SkipEncoding']:
-    commandResult = subprocess.run(firstPass, capture_output=True)
+    commandResult = subprocess.run(x264, capture_output=True)
   print(commandResult)
 
-  t2 = time.localtime()
-  # current_time = time.strftime("%H:%M:%S", t2)
-  print("\nRunning second pass. "+ time.strftime("%H:%M:%S", t2))
-  # print(current_time)
-  # Print the command as it would normally read, without brackets and commas
-  for arg in secondPass:
-    print(arg, end=" ", flush=True)
-  if not settings['SkipEncoding']:
-    commandResult = subprocess.run(secondPass, capture_output=True)
-  print(commandResult)
-
-  print
+  print('x264 finished')
 
   return True
