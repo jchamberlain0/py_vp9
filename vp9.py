@@ -177,4 +177,4 @@ def encodeVP9(crf, settings):
 
   print
 
-  return True
+  return 1
