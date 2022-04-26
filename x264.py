@@ -5,6 +5,10 @@ import time
 def encodex264(crf, settings):
 
 
+  if settings['PixelFormat'] == 'yuv444p':
+    print('x264: 4:4:4 chroma unsupported - skipping file')
+    return 2
+
   # List of arguments to pass to ffmpeg
   x264 = ['ffmpeg']
 
@@ -73,8 +77,7 @@ def encodex264(crf, settings):
   if settings['PixelFormat'] == 'yuv420p':
     succinctPxFmt = '_420'
 
-
-  x264.append(settings['OutFileDir']+settings['NewOutputFolder']+"/zgv_n64_"+succinctCodec+"_"+horizontalLines+succinctPxFmt+"_crf"+crf+settings['OutputExtension'])
+  x264.append(settings['OutFileDir']+settings['NewOutputFolder']+"/zgv_n64_"+succinctCodec+"_"+horizontalLines+succinctPxFmt+"_crf"+crf+'.mp4')
   
 
   commandResult = ''
