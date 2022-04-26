@@ -3,6 +3,7 @@ import yaml
 import pprint
 import time
 import vp9
+import x264
 import os
 import shutil
 import sys
@@ -51,6 +52,7 @@ if settings['Debug']:
 
 result = False
 filesEncoded = 0
+filesSkipped = 0
 
 if settings['Batch']:
   # Batch mode nests several loops over arrays in settings, and encodes one video for each intersection.
@@ -80,13 +82,20 @@ if settings['Batch']:
           print(PixelFormat)
           if (OutputResolution == 'default' and PixelFormat == 'yuv444p' ):
             print('Skipping out on 480p/4:4:4 encode.')
+            filesSkipped = filesSkipped + 1
             # continue
           else:
-            result = vp9.encodeVP9(crf,modSettings) # Pass in the modified settings.
-            if result == True:
-              print('Finished encode for crf '+crf)
+            if settings['OutputCodec'] == 'libvpx-vp9':
+              result = vp9.encodeVP9(crf, modSettings) # Pass in the modified settings.
+            elif settings['OutputCodec'] == 'libx264':
+              result = x264.encodex264(crf, modSettings) # Pass in the modified settings.
+            if result == 1:
+              print('Finished '+ Codec +' encode for crf '+crf)
               filesEncoded = filesEncoded+1
-            if result != True:
+            elif result == 2:
+              print('Skipped over '+ Codec +' encode for crf '+crf)
+              filesSkipped = filesSkipped+1
+            else:
               print("\nAn issue was encountered while encoding file with crf "+crf+". Stopping batch mode.")
               break
 else:
@@ -96,7 +105,7 @@ else:
 
 
 if result == True:
-  print('\n\nSuccessfully encoded '+str(filesEncoded)+' file(s).'+' Press Enter to continue...')
+  print('\n\nEncoded '+str(filesEncoded)+' files. Skipped '+str(filesSkipped)+'.'+' Press Enter to continue...')
 else:
   print('\n\nThere was an issue with encoding. Press Enter to continue...')
 
