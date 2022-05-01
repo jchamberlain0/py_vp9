@@ -8,6 +8,9 @@ def encodex264(crf, settings):
   if settings['PixelFormat'] == 'yuv444p':
     print('x264: 4:4:4 chroma unsupported - skipping file')
     return 2
+  if settings['Scale']:
+    print('x264: Skipping 240p encodes.')
+    return 2
 
   # List of arguments to pass to ffmpeg
   x264 = ['ffmpeg']
@@ -62,6 +65,10 @@ def encodex264(crf, settings):
   x264.append(settings['OutputCodec'])
   # x264.append("-b:v")
   # x264.append("0")
+
+  x264.append("-preset")
+  x264.append("slower")
+
   x264.append("-crf")
   x264.append(crf)
   
