@@ -105,4 +105,4 @@ def encodex264(crf, settings):
 
   print('x264 finished')
 
-  return True
+  return 1
