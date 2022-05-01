@@ -14,7 +14,6 @@ with open("settings.yaml", 'r') as stream:
 
 targetDir = settings['OutFileDir']+settings['NewOutputFolder']
 
-
 try:
   print('creating output folder '+settings['NewOutputFolder'])
   os.mkdir(targetDir)
@@ -42,7 +41,9 @@ modSettings = settings
 if settings['CreateImages']:
   os.mkdir(settings['OutFileDir']+settings['NewOutputFolder']+'/images')
   if png.createPngs(settings):
-    print('Saved images.. Maybe.')
+    print('Saved images.')
+  if png.createMontages(settings):
+    print('saved montages.')
 
 if settings['Debug']:
   pp = pprint.PrettyPrinter(indent=2)
