@@ -7,6 +7,10 @@ import time
 #   rather than trying to modify the first pass arg list or something fancy like that.
 def encodeVP9(crf, settings):
 
+  if (settings['OutResolution'] == '640x480' and settings['PixelFormat'] == 'yuv444p' ):
+    print('vp9: Skipping out on 480p/4:4:4 encode.')
+    return 2
+
   # List of arguments to pass to ffmpeg
   firstPass = ['ffmpeg']
   secondPass = ['ffmpeg']

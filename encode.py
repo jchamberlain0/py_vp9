@@ -70,35 +70,31 @@ if settings['Batch']:
         # default output resolution means don't scale.
         if OutputResolution == 'default':
           modSettings['Scale'] = False
+          modSettings['OutResolution'] = '640x480'
         else:
           # set the resolution for these encodes.
           modSettings['Scale'] = True
           modSettings['OutResolution'] = OutputResolution 
 
         for crf in settings['CRF']:
-          time.sleep(0.4)
+          # time.sleep(0.4)
 
           # Skipping 480p/4:4:4 encodes for now.
           print(OutputResolution)
           print(PixelFormat)
-          if (OutputResolution == 'default' and PixelFormat == 'yuv444p' ):
-            print('Skipping out on 480p/4:4:4 encode.')
-            filesSkipped = filesSkipped + 1
-            # continue
+          if settings['OutputCodec'] == 'libvpx-vp9':
+            result = vp9.encodeVP9(crf, modSettings) # Pass in the modified settings.
+          elif settings['OutputCodec'] == 'libx264':
+            result = x264.encodex264(crf, modSettings) # Pass in the modified settings.
+          if result == 1:
+            print('Finished '+ Codec +' encode for crf '+crf)
+            filesEncoded = filesEncoded+1
+          elif result == 2:
+            print('Skipped over '+ Codec +' encode for crf '+crf)
+            filesSkipped = filesSkipped+1
           else:
-            if settings['OutputCodec'] == 'libvpx-vp9':
-              result = vp9.encodeVP9(crf, modSettings) # Pass in the modified settings.
-            elif settings['OutputCodec'] == 'libx264':
-              result = x264.encodex264(crf, modSettings) # Pass in the modified settings.
-            if result == 1:
-              print('Finished '+ Codec +' encode for crf '+crf)
-              filesEncoded = filesEncoded+1
-            elif result == 2:
-              print('Skipped over '+ Codec +' encode for crf '+crf)
-              filesSkipped = filesSkipped+1
-            else:
-              print("\nAn issue was encountered while encoding file with crf "+crf+". Stopping batch mode.")
-              break
+            print("\nAn issue was encountered while encoding file with crf "+crf+". Stopping batch mode.")
+            break
 else:
   # Pass a flag to the vp9 encoding function instead of a value
   result = vp9.encodeVP9("defaultCRF",settings)
