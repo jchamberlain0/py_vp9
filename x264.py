@@ -27,8 +27,10 @@ def encodex264(crf, settings):
     # Single encode mode uses the CRF from settings.
     # If a value was passed in, that will be used instead.
     crf = settings['CRFDefault']
-
-
+  
+  if crf == '10':
+    print('x264: Skipping crf 10 encode.. they\'re too big with libx264.')
+    return 2
 
   # Build first pass
   x264.append("-y")
