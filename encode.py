@@ -82,6 +82,7 @@ if settings['Batch']:
           # Skipping 480p/4:4:4 encodes for now.
           print(OutputResolution)
           print(PixelFormat)
+          result = 0
           if settings['OutputCodec'] == 'libvpx-vp9':
             result = vp9.encodeVP9(crf, modSettings) # Pass in the modified settings.
           elif settings['OutputCodec'] == 'libx264':
@@ -108,4 +109,4 @@ else:
 
 # wait for user input. this makes it so the output doesn't
 # dissapear immediately when invoking outside the CLI.
-input()
+# input()
