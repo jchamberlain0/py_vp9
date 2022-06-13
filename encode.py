@@ -3,27 +3,47 @@ import yaml
 import pprint
 import time
 import vp9
+import x264
 import os
+import shutil
 import sys
 import png
 
 with open("settings.yaml", 'r') as stream:
-    settings = yaml.safe_load(stream)
+  settings = yaml.safe_load(stream)
+
+targetDir = settings['OutFileDir']+settings['NewOutputFolder']
 
 try:
-  os.mkdir(settings['OutFileDir']+settings['NewOutputFolder'])
+  print('creating output folder '+settings['NewOutputFolder'])
+  os.mkdir(targetDir)
 except FileExistsError:
-  print("NewOutputFolder \""+ settings['NewOutputFolder'] +"\" already exists. This isn't a bug, it's a feature to help keep your folders clean :)")
+  print("Output folder \""+ settings['NewOutputFolder'] +"\" already exists. Please rename output directory to avoid losing work.")
   sys.exit("Exiting")
 
-os.mkdir(settings['OutFileDir']+settings['NewOutputFolder']+'/images')
+# shutil.copyfile(os.path.dirname(os.path.realpath('settings.yaml')),settings['OutFileDir']+settings['NewOutputFolder']+"py_vp9.yaml")
+
+# Copy settings to new target dir
+shutil.copyfile('settings.yaml',targetDir+'/py_vp9.yaml')
+
+# other method to export settings.. This does not preserve line order, but it does strip comments...
+# print(targetDir)
+# settingsDump = open(targetDir+'py_vp9.yaml','w')
+# yaml.dump(settings,settingsDump)
+# settingsDump.close()
+# with open()
+
+
 
 # settings copy that can be mutated to allow multiple results in single-encode context.
 modSettings = settings
 
 if settings['CreateImages']:
+  os.mkdir(settings['OutFileDir']+settings['NewOutputFolder']+'/images')
   if png.createPngs(settings):
-    print('Saved images.. Maybe.')
+    print('Saved images.')
+  if png.createMontages(settings):
+    print('saved montages.')
 
 if settings['Debug']:
   pp = pprint.PrettyPrinter(indent=2)
@@ -33,6 +53,7 @@ if settings['Debug']:
 
 result = False
 filesEncoded = 0
+filesSkipped = 0
 
 if settings['Batch']:
   # Batch mode nests several loops over arrays in settings, and encodes one video for each intersection.
@@ -42,24 +63,39 @@ if settings['Batch']:
     modSettings['OutputCodec'] = Codec
 
     for OutputResolution in settings['BatchOutputResolutions']:
-      
-      # default output resolution means don't scale.
-      if OutputResolution == 'default':
-        modSettings['Scale'] = False
-      else:
-        # set the resolution for these encodes.
-        modSettings['Scale'] = True
-        modSettings['OutResolution'] = OutputResolution 
 
-      for crf in settings['CRF']:
-        time.sleep(1)
-        result = vp9.encodeVP9(crf,modSettings) # Pass in the modified settings.
-        if result == True:
-          print('Finished encode for crf '+crf)
-          filesEncoded = filesEncoded+1
-        if result != True:
-          print("\nAn issue was encountered while encoding file with crf "+crf+". Stopping batch mode.")
-          break
+      for PixelFormat in settings['PixelFormats']:
+        modSettings['PixelFormat'] = PixelFormat
+      
+        # default output resolution means don't scale.
+        if OutputResolution == 'default':
+          modSettings['Scale'] = False
+          modSettings['OutResolution'] = '640x480'
+        else:
+          # set the resolution for these encodes.
+          modSettings['Scale'] = True
+          modSettings['OutResolution'] = OutputResolution 
+
+        for crf in settings['CRF']:
+          # time.sleep(0.4)
+
+          # Skipping 480p/4:4:4 encodes for now.
+          print(OutputResolution)
+          print(PixelFormat)
+          result = 0
+          if settings['OutputCodec'] == 'libvpx-vp9':
+            result = vp9.encodeVP9(crf, modSettings) # Pass in the modified settings.
+          elif settings['OutputCodec'] == 'libx264':
+            result = x264.encodex264(crf, modSettings) # Pass in the modified settings.
+          if result == 1:
+            print('Finished '+ Codec +' encode for crf '+crf)
+            filesEncoded = filesEncoded+1
+          elif result == 2:
+            print('Skipped over '+ Codec +' encode for crf '+crf)
+            filesSkipped = filesSkipped+1
+          else:
+            print("\nAn issue was encountered while encoding file with crf "+crf+". Stopping batch mode.")
+            break
 else:
   # Pass a flag to the vp9 encoding function instead of a value
   result = vp9.encodeVP9("defaultCRF",settings)
@@ -67,10 +103,10 @@ else:
 
 
 if result == True:
-  print('\n\nSuccessfully encoded '+str(filesEncoded)+' file(s).'+' Press Enter to continue...')
+  print('\n\nEncoded '+str(filesEncoded)+' files. Skipped '+str(filesSkipped)+'.'+' Press Enter to continue...')
 else:
   print('\n\nThere was an issue with encoding. Press Enter to continue...')
 
 # wait for user input. this makes it so the output doesn't
 # dissapear immediately when invoking outside the CLI.
-input()
+# input()

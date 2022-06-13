@@ -7,6 +7,10 @@ import time
 #   rather than trying to modify the first pass arg list or something fancy like that.
 def encodeVP9(crf, settings):
 
+  if (settings['OutResolution'] == '640x480' and settings['PixelFormat'] == 'yuv444p' ):
+    print('vp9: Skipping out on 480p/4:4:4 encode.')
+    return 2
+
   # List of arguments to pass to ffmpeg
   firstPass = ['ffmpeg']
   secondPass = ['ffmpeg']
@@ -33,6 +37,9 @@ def encodeVP9(crf, settings):
     if settings['TrimStart']:
       firstPass.append("-ss")
       firstPass.append(str(settings['TrimStart']))
+    if settings['TrimVideoEnd']:
+      firstPass.append("-to")
+      firstPass.append(str(settings['TrimEnd']))
 
   firstPass.append("-i")
   firstPass.append(settings['InputFileDir']+settings['InputFilename']+settings['InputExtension'])
@@ -41,11 +48,9 @@ def encodeVP9(crf, settings):
     firstPass.append("-deadline")
     firstPass.append(settings['Deadline'])
 
-  
-  if settings['Scale']:
-    # todo - see below.
+  if settings['SetPixelFormat']:
     firstPass.append('-pix_fmt')
-    firstPass.append('yuv444p')
+    firstPass.append(settings['PixelFormat'])
 
 
   if settings['Scale']:
@@ -79,6 +84,9 @@ def encodeVP9(crf, settings):
     if settings['TrimStart']:
       secondPass.append("-ss")
       secondPass.append(str(settings['TrimStart']))
+    if settings['TrimVideoEnd']:
+      secondPass.append("-to")
+      secondPass.append(str(settings['TrimEnd']))
 
   # Build Second Pass
   secondPass.append("-i")
@@ -89,11 +97,9 @@ def encodeVP9(crf, settings):
     secondPass.append(settings['Deadline'])
   
 
-  if settings['Scale']:
-    # todo- make a setting for this.
-    # typically you only care about perfect chroma for 240p, but 480 does look a tiny bit better with perfect chroma too.
+  if settings['SetPixelFormat']:
     secondPass.append('-pix_fmt')
-    secondPass.append('yuv444p')
+    secondPass.append(settings['PixelFormat'])
   
 
   if settings['Scale']:
@@ -135,9 +141,15 @@ def encodeVP9(crf, settings):
   succinctCodec = settings['OutputCodec']
   if settings['OutputCodec'] == 'libvpx-vp9':
     succinctCodec = 'vp9'
+  
+  succinctPxFmt = '_420'
+  if settings['PixelFormat'] == 'yuv444p':
+    succinctPxFmt = '_444'
+  if settings['PixelFormat'] == 'yuv420p':
+    succinctPxFmt = '_420'
 
 
-  secondPass.append(settings['OutFileDir']+settings['NewOutputFolder']+"/zgv_n64_"+succinctCodec+"_"+horizontalLines+"_crf"+crf+settings['OutputExtension'])
+  secondPass.append(settings['OutFileDir']+settings['NewOutputFolder']+"/zgv_n64_"+succinctCodec+"_"+horizontalLines+succinctPxFmt+"_crf"+crf+settings['OutputExtension'])
   
 
   commandResult = ''
@@ -169,4 +181,4 @@ def encodeVP9(crf, settings):
 
   print
 
-  return True
+  return 1

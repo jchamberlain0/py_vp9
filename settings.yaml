@@ -1,28 +1,32 @@
 ---
 InputFileDir: C:/video/lossless/
 # InputFileDir: C:/video/releaseOBS/
-# InputFilename: 2021-10-26_18-46-11
-InputFilename: 2022-02-21_21-07-59
+InputFilename: 2022-04-22_21-04-08
 # InputExtension: '.mp4'
 InputExtension: '.avi'
 
-OutFileDir: C:/video/
-NewOutputFolder: 'example-video'
+OutFileDir: C:/video/py_vp9/
+NewOutputFolder: 'blockpuzzle-add264'
 OutputExtension: '.webm'
 # OutputCodec: 'libvpx'
 OutputCodec: 'libvpx-vp9'
 
 StripAudio: false
 TrimVideo: true
-TrimStart: '00:00:00.149'
+TrimStart: '00:00:00.150'
+TrimVideoEnd: false
+TrimEnd: '00:00:00.000'
+
 Scale: true
 ScaleMode: neighbor
-# OutResolution: 320x240
 OutResolution: 320x240
-# OutResolution: 320x240
 # OutResolution: 640x480
-# OutResolution: 960x720
-# OutResolution: 1280x960
+
+PixelFormat: yuv444p
+SetPixelFormat: true
+PixelFormats:
+  - 'yuv444p'
+  - 'yuv420p'
 
 UseDeadline: false
 Deadline: 'best'
@@ -31,24 +35,25 @@ Deadline: 'best'
 Batch: true
 CRFDefault: '20'
 CRF: #batch mode crf
-  - '48'
-  - '42'
-  - '36'
-  # - '30'
-  - '26'
-  - '14'
-  # - '8'
+  - '50'
+  - '40'
+  - '30'
+  - '20'
+  - '10'
+  # - '0'
 
 BatchOutputResolutions:
   - 'default'
   - '320x240'
+  # - '313x237'
 
 BatchCodecs:
   # - 'libvpx'
+  - 'libx264'
   - 'libvpx-vp9'
 
-CreateImages: true
+CreateImages: false
 
 Debug: true
 SkipEncoding: false
-SkipImages: false
+SkipImages: true
