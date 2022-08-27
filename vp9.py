@@ -79,7 +79,8 @@ def encodeVP9(crf, settings):
 
   # TODO: add operating system check so this works on Linux.
   # firstPass.append("NUL")
-  firstPass.append("temp")
+  firstPass.append("temp/t")
+  # firstPass.append("temp")
 
 
   if settings['TrimVideo']:
