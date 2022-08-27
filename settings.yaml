@@ -7,7 +7,7 @@ InputExtension: '.avi'
 
 # OutFileDir: C:/video/py_vp9/
 OutFileDir: /home/ec2-user/video/input/
-NewOutputFolder: 'kz-ambience'
+NewOutputFolder: 'kz-ambience2'
 OutputExtension: '.webm'
 # OutputCodec: 'libvpx'
 OutputCodec: 'libvpx-vp9'
@@ -58,4 +58,4 @@ SkipEncoding: false
 
 CreateImages: true
 #extra flag: generate commands but do not execute
-# SkipImages: false
+SkipImages: true
