@@ -121,3 +121,24 @@ def createMontages(settings):
 
   for i in range(len(imageOffsets)):
     createMontage(settings,imageOffsets[i],gridWidths[i])
+    createJPG(settings,imageOffsets[i],gridWidths[i])
+
+def createJPG(settings,imageOffset,gridWidth):
+  # ad-hoc: take the montage png that was just saved and make it a jpg
+  print('createJPG')
+  command = ['magick']
+
+  command.append(settings['OutFileDir']+settings['NewOutputFolder']+'/montage'+str(gridWidth)+'.png')
+  command.append("-quality")
+  command.append("95")
+  command.append(settings['OutFileDir']+settings['NewOutputFolder']+'/montage'+str(gridWidth)+'.jpg')
+
+  t1 = time.localtime()
+  print("\nExporting JPGs...: "+ time.strftime("%H:%M:%S", t1))
+
+  print(command)
+
+  commandResult = subprocess.run(command, capture_output=True)
+  print(commandResult)
+
+  return True
