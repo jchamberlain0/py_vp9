@@ -1,19 +1,20 @@
 ---
-InputFileDir: C:/video/lossless/
-# InputFileDir: C:/video/releaseOBS/
-InputFilename: 2022-04-22_21-04-08
+# InputFileDir: C:/video/lossless/
+InputFileDir: /var/py_vp9/input
+InputFilename: 2022-08-26_17-16-46
 # InputExtension: '.mp4'
 InputExtension: '.avi'
 
-OutFileDir: C:/video/py_vp9/
-NewOutputFolder: 'blockpuzzle-add264'
+# OutFileDir: C:/video/py_vp9/
+OutFileDir: /var/py_vp9/output
+NewOutputFolder: 'kz-ambience'
 OutputExtension: '.webm'
 # OutputCodec: 'libvpx'
 OutputCodec: 'libvpx-vp9'
 
 StripAudio: false
 TrimVideo: true
-TrimStart: '00:00:00.150'
+TrimStart: '00:00:00.000'
 TrimVideoEnd: false
 TrimEnd: '00:00:00.000'
 
@@ -22,8 +23,8 @@ ScaleMode: neighbor
 OutResolution: 320x240
 # OutResolution: 640x480
 
-PixelFormat: yuv444p
 SetPixelFormat: true
+PixelFormat: yuv444p
 PixelFormats:
   - 'yuv444p'
   - 'yuv420p'
@@ -43,7 +44,7 @@ CRF: #batch mode crf
   # - '0'
 
 BatchOutputResolutions:
-  - 'default'
+  # - 'default'
   - '320x240'
   # - '313x237'
 
@@ -52,8 +53,9 @@ BatchCodecs:
   - 'libx264'
   - 'libvpx-vp9'
 
-CreateImages: false
-
 Debug: true
 SkipEncoding: false
-SkipImages: true
+
+CreateImages: true
+#extra flag: generate commands but do not execute
+SkipImages: false
