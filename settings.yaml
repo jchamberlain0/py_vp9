@@ -44,14 +44,14 @@ CRF: #batch mode crf
   # - '0'
 
 BatchOutputResolutions:
-  # - 'default'
-  - '320x240'
+  - 'default'
+  # - '320x240'
   # - '313x237'
 
 BatchCodecs:
   # - 'libvpx'
   - 'libx264'
-  - 'libvpx-vp9'
+  # - 'libvpx-vp9'
 
 Debug: true
 SkipEncoding: false
