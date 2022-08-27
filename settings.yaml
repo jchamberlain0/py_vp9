@@ -56,6 +56,6 @@ BatchCodecs:
 Debug: true
 SkipEncoding: false
 
-CreateImages: true
+CreateImages: false
 #extra flag: generate commands but do not execute
 SkipImages: true
