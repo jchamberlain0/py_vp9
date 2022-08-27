@@ -1,12 +1,12 @@
 ---
 # InputFileDir: C:/video/lossless/
-InputFileDir: /var/py_vp9/input
+InputFileDir: /home/ec2-user/video/input/
 InputFilename: 2022-08-26_17-16-46
 # InputExtension: '.mp4'
 InputExtension: '.avi'
 
 # OutFileDir: C:/video/py_vp9/
-OutFileDir: /var/py_vp9/output
+OutFileDir: /home/ec2-user/video/input/
 NewOutputFolder: 'kz-ambience'
 OutputExtension: '.webm'
 # OutputCodec: 'libvpx'
@@ -36,11 +36,11 @@ Deadline: 'best'
 Batch: true
 CRFDefault: '20'
 CRF: #batch mode crf
-  - '50'
-  - '40'
+  # - '50'
+  # - '40'
   - '30'
-  - '20'
-  - '10'
+  # - '20'
+  # - '10'
   # - '0'
 
 BatchOutputResolutions:
