@@ -78,7 +78,9 @@ def encodeVP9(crf, settings):
   firstPass.append("webm")
 
   # TODO: add operating system check so this works on Linux.
-  firstPass.append("NUL")
+  # firstPass.append("NUL")
+  firstPass.append("/dev/null")
+
 
   if settings['TrimVideo']:
     if settings['TrimStart']:
