@@ -78,8 +78,8 @@ def encodeVP9(crf, settings):
   firstPass.append("webm")
 
   # TODO: add operating system check so this works on Linux.
-  # firstPass.append("NUL")
-  firstPass.append("temp/t")
+  firstPass.append("NUL")
+  # firstPass.append("temp/t")
   # firstPass.append("temp")
 
 
