@@ -16,11 +16,14 @@ def encodeVP9(crf, settings):
   secondPass = ['ffmpeg']
 
   # Used to denote scaled resolution in output file
-  horizontalLines = "480"
+  horizontalLines = "480" # default when not scaling
   if settings['Scale']:
     # These args will be omitted entirely if Scale is false.
-    # TODO: make the horizontallines logic more robust, it will fail on 4-digit resolutions.
-    horizontalLines = settings['OutResolution'][4:7]
+    resString = settings['OutResolution']
+    # Split the output resolution string to get the number after the x
+    # This works with all output resolutions
+    charX = resString.index('x')
+    horizontalLines = resString[charX+1:len(resString)]
 
   # Check if a CRF value was passed in - this will be used by batch mode.
   if crf == "defaultCRF":
