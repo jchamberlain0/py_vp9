@@ -29,7 +29,10 @@ def encodex264(crf, settings):
     crf = settings['CRFDefault']
   
   if crf == '10':
-    print('x264: Skipping crf 10 encode.. they\'re too big with libx264.')
+    print('x264: Skipping crf 10 encode..')
+    return 2
+  if crf == '0':
+    print('x264: Skipping crf 0 encode.')
     return 2
 
   # Build first pass

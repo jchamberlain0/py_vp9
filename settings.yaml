@@ -1,19 +1,22 @@
 ---
+# InputFileDir: E:/media/zgv/backups-april2022/
+# InputFileDir: /home/ec2-user/video/input/
 InputFileDir: C:/video/lossless/
-# InputFileDir: C:/video/releaseOBS/
-InputFilename: 2022-04-22_21-04-08
+InputFilename: 2022-10-18_22-51-24
 # InputExtension: '.mp4'
 InputExtension: '.avi'
 
 OutFileDir: C:/video/py_vp9/
-NewOutputFolder: 'blockpuzzle-add264'
+# OutFileDir: /home/ec2-user/video/input/
+NewOutputFolder: 'output'
 OutputExtension: '.webm'
 # OutputCodec: 'libvpx'
 OutputCodec: 'libvpx-vp9'
 
 StripAudio: false
+
 TrimVideo: true
-TrimStart: '00:00:00.150'
+TrimStart: '00:00:00.000'
 TrimVideoEnd: false
 TrimEnd: '00:00:00.000'
 
@@ -22,8 +25,8 @@ ScaleMode: neighbor
 OutResolution: 320x240
 # OutResolution: 640x480
 
-PixelFormat: yuv444p
 SetPixelFormat: true
+PixelFormat: yuv444p
 PixelFormats:
   - 'yuv444p'
   - 'yuv420p'
@@ -40,20 +43,24 @@ CRF: #batch mode crf
   - '30'
   - '20'
   - '10'
-  # - '0'
+  - '0'
 
 BatchOutputResolutions:
   - 'default'
   - '320x240'
   # - '313x237'
+  # - '2880x2160' # (4k)
 
 BatchCodecs:
   # - 'libvpx'
   - 'libx264'
   - 'libvpx-vp9'
 
-CreateImages: false
-
 Debug: true
 SkipEncoding: false
-SkipImages: true
+
+CreateImages: true
+#extra flag: generate commands but do not execute
+SkipImages: false
+
+RunOCR: true
