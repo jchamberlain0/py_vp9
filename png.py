@@ -35,7 +35,7 @@ def createPngs(settings):
   command.append('scale=320x240')
   command.append('-sws_flags')
   command.append('neighbor')
-  command.append(settings['OutFileDir']+settings['NewOutputFolder']+'/images/'+'zgv%04d.png')
+  command.append(settings['OutFileDir']+settings['NewOutputFolder']+'/images/'+'zgv%05d.png')
 
   for arg in command:
     # Print the args without the brackets and commas
@@ -116,8 +116,8 @@ def createMontage(settings,imageOffset,gridWidth):
 
 def createMontages(settings):
 
-  imageOffsets = [4,12,108]
-  gridWidths = [2,4,12]
+  imageOffsets = [4,12,108,432]
+  gridWidths = [2,4,12,24]
 
   for i in range(len(imageOffsets)):
     createMontage(settings,imageOffsets[i],gridWidths[i])
