@@ -1,2 +1,7 @@
 ffmpeg2pass-0.log
 __pycache__
+buttonDetails.py
+char.py
+ocr.py
+colors.py
+inputs.json
