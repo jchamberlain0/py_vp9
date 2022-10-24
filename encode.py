@@ -8,6 +8,9 @@ import os
 import shutil
 import sys
 import png
+import ocr
+
+startTime = time.time()
 
 with open("settings.yaml", 'r') as stream:
   settings = yaml.safe_load(stream)
@@ -18,7 +21,8 @@ try:
   print('creating output folder '+settings['NewOutputFolder'])
   os.mkdir(targetDir)
 except FileExistsError:
-  print("Output folder \""+ settings['NewOutputFolder'] +"\" already exists. Please rename output directory to avoid losing work.")
+  # TODO: add a sequential digit to the output folder instead of quitting.
+  print("Output folder \""+ settings['NewOutputFolder'] +"\" already exists.\nPlease rename output directory to avoid losing work.")
   sys.exit("Exiting")
 
 # shutil.copyfile(os.path.dirname(os.path.realpath('settings.yaml')),settings['OutFileDir']+settings['NewOutputFolder']+"py_vp9.yaml")
@@ -44,12 +48,16 @@ if settings['CreateImages']:
     print('Saved images.')
   if png.createMontages(settings):
     print('saved montages.')
+  if settings['RunOCR']:
+    # Run adjacent ocr script to remove duplicate frames
+    os.mkdir(settings['OutFileDir']+settings['NewOutputFolder']+'/unique')
+    if ocr.readFolderInputs(settings['OutFileDir']+settings['NewOutputFolder']+'/images/*', settings['OutFileDir']+settings['NewOutputFolder']+'/unique/'):
+      print('saved unique files.')  
 
 if settings['Debug']:
   pp = pprint.PrettyPrinter(indent=2)
   print()
   pp.pprint(settings)
-
 
 result = False
 filesEncoded = 0
@@ -106,6 +114,8 @@ if result == True:
   print('\n\nEncoded '+str(filesEncoded)+' files. Skipped '+str(filesSkipped)+'.'+' Press Enter to continue...')
 else:
   print('\n\nThere was an issue with encoding. Press Enter to continue...')
+
+print("--- %s seconds ---" % (time.time() - startTime))
 
 # wait for user input. this makes it so the output doesn't
 # dissapear immediately when invoking outside the CLI.
