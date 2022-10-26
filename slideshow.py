@@ -7,10 +7,11 @@ import time
 def encodeLossless(settings):
 
 
-  ssDirectory = settings['OutFileDir']+settings['NewOutputFolder']+"/ss/"
 
-  
 
+  uniqueDirectory = settings['OutFileDir']+settings['NewOutputFolder']+"/unique/"
+  slideshowDirectory = settings['OutFileDir']+settings['NewOutputFolder']+"/ss/"
+  outputFile = slideshowDirectory+"lossless.webm"
 
 
   # List of arguments to pass to ffmpeg
@@ -19,15 +20,14 @@ def encodeLossless(settings):
   slideshow.append("-framerate")
   slideshow.append("20")
   slideshow.append("-i")
-  slideshow.append("%05d.png")
+  slideshow.append(uniqueDirectory+"%05d.png")
   slideshow.append("-pix_fmt")
   slideshow.append("yuv444p")
-  slideshow.append("c:v")
+  slideshow.append("-c:v")
   slideshow.append("libvpx-vp9")
   slideshow.append("-lossless")
   slideshow.append("1")
-  slideshow.append("1")
-  slideshow.append(settings['OutFileDir']+settings['NewOutputFolder']+"/ss/lossless.webm")
+  slideshow.append(outputFile)
 
   commandResult = ''
 
