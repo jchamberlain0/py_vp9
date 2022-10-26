@@ -9,114 +9,148 @@ import shutil
 import sys
 import png
 import ocr
+import slideshow
 
-startTime = time.time()
+def encodeVideoBatch(modSettings,settings):
 
-with open("settings.yaml", 'r') as stream:
-  settings = yaml.safe_load(stream)
+  result = False
+  filesEncoded = 0
+  filesSkipped = 0
 
-targetDir = settings['OutFileDir']+settings['NewOutputFolder']
-
-try:
-  print('creating output folder '+settings['NewOutputFolder'])
-  os.mkdir(targetDir)
-except FileExistsError:
-  # TODO: add a sequential digit to the output folder instead of quitting.
-  print("Output folder \""+ settings['NewOutputFolder'] +"\" already exists.\nPlease rename output directory to avoid losing work.")
-  sys.exit("Exiting")
-
-# shutil.copyfile(os.path.dirname(os.path.realpath('settings.yaml')),settings['OutFileDir']+settings['NewOutputFolder']+"py_vp9.yaml")
-
-# Copy settings to new target dir
-shutil.copyfile('settings.yaml',targetDir+'/py_vp9.yaml')
-
-# other method to export settings.. This does not preserve line order, but it does strip comments...
-# print(targetDir)
-# settingsDump = open(targetDir+'py_vp9.yaml','w')
-# yaml.dump(settings,settingsDump)
-# settingsDump.close()
-# with open()
-
-
-
-# settings copy that can be mutated to allow multiple results in single-encode context.
-modSettings = settings
-
-if settings['CreateImages']:
-  os.mkdir(settings['OutFileDir']+settings['NewOutputFolder']+'/images')
-  if png.createPngs(settings):
-    print('Saved images.')
-  if png.createMontages(settings):
-    print('saved montages.')
-  if settings['RunOCR']:
-    # Run adjacent ocr script to remove duplicate frames
-    os.mkdir(settings['OutFileDir']+settings['NewOutputFolder']+'/unique')
-    if ocr.readFolderInputs(settings['OutFileDir']+settings['NewOutputFolder']+'/images/*', settings['OutFileDir']+settings['NewOutputFolder']+'/unique/'):
-      print('saved unique files.')  
-
-if settings['Debug']:
-  pp = pprint.PrettyPrinter(indent=2)
-  print()
-  pp.pprint(settings)
-
-result = False
-filesEncoded = 0
-filesSkipped = 0
-
-if settings['Batch']:
-  # Batch mode nests several loops over arrays in settings, and encodes one video for each intersection.
-  for Codec in settings['BatchCodecs']:
-    
-    # Set the codec for these encodes.
-    modSettings['OutputCodec'] = Codec
-
-    for OutputResolution in settings['BatchOutputResolutions']:
-
-      for PixelFormat in settings['PixelFormats']:
-        modSettings['PixelFormat'] = PixelFormat
+  if settings['Batch']:
+    # Batch mode nests several loops over arrays in settings, and encodes one video for each intersection.
+    for Codec in settings['BatchCodecs']:
       
-        # default output resolution means don't scale.
-        if OutputResolution == 'default':
-          modSettings['Scale'] = False
-          modSettings['OutResolution'] = '640x480'
-        else:
-          # set the resolution for these encodes.
-          modSettings['Scale'] = True
-          modSettings['OutResolution'] = OutputResolution 
+      # Set the codec for these encodes.
+      modSettings['OutputCodec'] = Codec
 
-        for crf in settings['CRF']:
-          # time.sleep(0.4)
+      for OutputResolution in settings['BatchOutputResolutions']:
 
-          # Skipping 480p/4:4:4 encodes for now.
-          print(OutputResolution)
-          print(PixelFormat)
-          result = 0
-          if settings['OutputCodec'] == 'libvpx-vp9':
-            result = vp9.encodeVP9(crf, modSettings) # Pass in the modified settings.
-          elif settings['OutputCodec'] == 'libx264':
-            result = x264.encodex264(crf, modSettings) # Pass in the modified settings.
-          if result == 1:
-            print('Finished '+ Codec +' encode for crf '+crf)
-            filesEncoded = filesEncoded+1
-          elif result == 2:
-            print('Skipped over '+ Codec +' encode for crf '+crf)
-            filesSkipped = filesSkipped+1
+        for PixelFormat in settings['PixelFormats']:
+          modSettings['PixelFormat'] = PixelFormat
+        
+          # default output resolution means don't scale.
+          if OutputResolution == 'default':
+            modSettings['Scale'] = False
+            modSettings['OutResolution'] = '640x480'
           else:
-            print("\nAn issue was encountered while encoding file with crf "+crf+". Stopping batch mode.")
-            break
-else:
-  # Pass a flag to the vp9 encoding function instead of a value
-  result = vp9.encodeVP9("defaultCRF",settings)
-  filesEncoded = filesEncoded+1
+            # set the resolution for these encodes.
+            modSettings['Scale'] = True
+            modSettings['OutResolution'] = OutputResolution 
+
+          for crf in settings['CRF']:
+            # time.sleep(0.4)
+
+            # Skipping 480p/4:4:4 encodes for now.
+            print(OutputResolution)
+            print(PixelFormat)
+            result = 0
+            if settings['OutputCodec'] == 'libvpx-vp9':
+              result = vp9.encodeVP9(crf, modSettings) # Pass in the modified settings.
+            elif settings['OutputCodec'] == 'libx264':
+              result = x264.encodex264(crf, modSettings) # Pass in the modified settings.
+            if result == 1:
+              print('Finished '+ Codec +' encode for crf '+crf)
+              filesEncoded = filesEncoded+1
+            elif result == 2:
+              print('Skipped over '+ Codec +' encode for crf '+crf)
+              filesSkipped = filesSkipped+1
+            else:
+              print("\nAn issue was encountered while encoding file with crf "+crf+". Stopping batch mode.")
+              break
+  else:
+    # Pass a flag to the vp9 encoding function instead of a value
+    result = vp9.encodeVP9("defaultCRF",settings)
+    filesEncoded = filesEncoded+1
 
 
-if result == True:
-  print('\n\nEncoded '+str(filesEncoded)+' files. Skipped '+str(filesSkipped)+'.'+' Press Enter to continue...')
-else:
-  print('\n\nThere was an issue with encoding. Press Enter to continue...')
+  if result == True:
+    print('\n\nEncoded '+str(filesEncoded)+' files. Skipped '+str(filesSkipped)+'.'+' Press Enter to continue...')
+  else:
+    print('\n\nThere was an issue with encoding. Press Enter to continue...')
 
-print("--- %s seconds ---" % (time.time() - startTime))
+  return True
 
-# wait for user input. this makes it so the output doesn't
-# dissapear immediately when invoking outside the CLI.
-# input()
+
+
+def main():  
+  startTime = time.time()
+
+  with open("settings.yaml", 'r') as stream:
+    settings = yaml.safe_load(stream)
+
+  targetDir = settings['OutFileDir']+settings['NewOutputFolder']
+
+  try:
+    print('creating output folder '+settings['NewOutputFolder'])
+    os.mkdir(targetDir)
+  except FileExistsError:
+    # TODO: add a sequential digit to the output folder instead of quitting.
+    print("Output folder \""+ settings['NewOutputFolder'] +"\" already exists.\nPlease rename output directory to avoid losing work.")
+    sys.exit("Exiting")
+
+  # shutil.copyfile(os.path.dirname(os.path.realpath('settings.yaml')),settings['OutFileDir']+settings['NewOutputFolder']+"py_vp9.yaml")
+
+  # Copy settings to new target dir
+  shutil.copyfile('settings.yaml',targetDir+'/py_vp9.yaml')
+
+  # other method to export settings.. This does not preserve line order, but it does strip comments...
+  # print(targetDir)
+  # settingsDump = open(targetDir+'py_vp9.yaml','w')
+  # yaml.dump(settings,settingsDump)
+  # settingsDump.close()
+  # with open()
+
+
+
+  # settings copy that can be mutated to allow multiple results in single-encode context.
+  modSettings = settings
+
+  if settings['CreateImages']:
+    os.mkdir(settings['OutFileDir']+settings['NewOutputFolder']+'/images')
+    if png.createPngs(settings):
+      print('Saved images.')
+    if png.createMontages(settings):
+      print('saved montages.')
+    if settings['RunOCR']:
+      # Run adjacent ocr script to remove duplicate frames
+      os.mkdir(settings['OutFileDir']+settings['NewOutputFolder']+'/unique')
+      os.mkdir(settings['OutFileDir']+settings['NewOutputFolder']+'/ss')
+      if ocr.readFolderInputs(settings['OutFileDir']+settings['NewOutputFolder']+'/images/*', settings['OutFileDir']+settings['NewOutputFolder']+'/unique/'):
+        print('saved unique files.')
+        slideshow.encodeLossless(modSettings)
+
+  if settings['Debug']:
+    pp = pprint.PrettyPrinter(indent=2)
+    print()
+    pp.pprint(settings)
+
+  encodeVideoBatch(modSettings,settings)
+
+  # When the encodeVideoBatch returns, we can modify the settings further and
+  # Create a new batch based on the /ss/lossless.webm file.
+  modSettings["InputExtension"] = ".webm"
+  modSettings["InputFilename"] = "lossless"
+  modSettings["InputFileDir"] = modSettings["OutFileDir"] + modSettings["NewOutputFolder"]+ "/ss/"
+  modSettings["NewOutputFolder"] = modSettings["NewOutputFolder"] + "/ss/"
+  modSettings["StripAudio"] = True
+  modSettings["TrimVideo"] = False
+  modSettings["TrimVideoEnd"] = False
+
+  encodeVideoBatch(modSettings,settings)
+
+
+  # sys.exit("bye")
+
+
+
+  print("--- %s seconds ---" % (time.time() - startTime))
+
+  # wait for user input. this makes it so the output doesn't
+  # dissapear immediately when invoking outside the CLI.
+  # input()
+
+
+# don't run when imported
+if __name__ == "__main__":
+   main()
