@@ -17,31 +17,30 @@ import slideshow
 def getSourceResolution(filePath):
   ffprobe = ["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height", "-of", "csv=s=x:p=0", filePath]
 
-  try:
-    commandResult = subprocess.check_output(ffprobe)
-    print(commandResult)
-    input()
-    print(type(commandResult))
-    print(commandResult[2:8])
-    print(str(commandResult))
-    print(str(commandResult)[2:9])
-    input()
+  # TODO: make this substring work with high res input files. no current use case for it.
+  return str(subprocess.check_output(ffprobe))[2:9]
 
-    # TODO: get the substring of the returned value
-    # The first character is free, at position 2. The ending character is going to be variable for 4 digit resolutions,
-    # 
-    # It's gonna be something like commandResult = 
+  # try:
+  #   commandResult = subprocess.check_output(ffprobe)
+  #   print(str(commandResult)[2:9])
+  #   input()
 
-    return "doodoocaca"
+  #   # TODO: get the substring of the returned value
+  #   # The first character is free, at position 2. The ending character is going to be variable for 4 digit resolutions,
+  #   # 
+  #   # It's gonna be something like commandResult = 
 
-  except:
-    print("Error getting source video resolution.")
-    sys.exit("Exiting");
-  return sourceRes
+  #   return "doodoocaca"
+
+  # except:
+  #   print("Error getting source video resolution.")
+  #   sys.exit("Exiting");
+  # return sourceRes
 
 def encodeVideoBatch(modSettings,settings):
 
-  sourceRes = getSourceResolution(settings["InputFileDir"] + settings["InputFilename"]+ settings["InputExtension"])
+  sourcePath = settings["InputFileDir"] + settings["InputFilename"] + settings["InputExtension"];
+  sourceRes = getSourceResolution(sourcePath)
 
   print(sourceRes)
   input();
@@ -63,13 +62,22 @@ def encodeVideoBatch(modSettings,settings):
           modSettings['PixelFormat'] = PixelFormat
         
           # default output resolution means don't scale.
-          if OutputResolution == 'default':
+          # Um, maybe check if the source res is the same as the current output res here and everything else can stay the same!!!!!
+          # If the output resolution for this encode is the same as the video file,
+          # scaling can be turned off.
+          if sourceRes == OutputResolution:
             modSettings['Scale'] = False
-            modSettings['OutResolution'] = '640x480'
+            modSettings['OutResolution'] = OutputResolution
           else:
-            # set the resolution for these encodes.
             modSettings['Scale'] = True
-            modSettings['OutResolution'] = OutputResolution 
+            modSettings['OutResolution'] = OutputResolution
+          # if OutputResolution == 'default':
+          #   modSettings['Scale'] = False
+          #   modSettings['OutResolution'] = '640x480'
+          # else:
+          #   # set the resolution for these encodes.
+          #   modSettings['Scale'] = True
+          #   modSettings['OutResolution'] = OutputResolution 
 
           for crf in settings['CRF']:
             # time.sleep(0.4)
