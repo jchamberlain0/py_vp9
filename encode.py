@@ -7,11 +7,44 @@ import x264
 import os
 import shutil
 import sys
+import subprocess
 import png
 import ocr
 import slideshow
 
+# Source resolution is relevant for the slideshow format,
+# in addition to files that are not sourced from pixelFX (minimum 480p)
+def getSourceResolution(filePath):
+  ffprobe = ["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height", "-of", "csv=s=x:p=0", filePath]
+
+  try:
+    commandResult = subprocess.check_output(ffprobe)
+    print(commandResult)
+    input()
+    print(type(commandResult))
+    print(commandResult[2:8])
+    print(str(commandResult))
+    print(str(commandResult)[2:9])
+    input()
+
+    # TODO: get the substring of the returned value
+    # The first character is free, at position 2. The ending character is going to be variable for 4 digit resolutions,
+    # 
+    # It's gonna be something like commandResult = 
+
+    return "doodoocaca"
+
+  except:
+    print("Error getting source video resolution.")
+    sys.exit("Exiting");
+  return sourceRes
+
 def encodeVideoBatch(modSettings,settings):
+
+  sourceRes = getSourceResolution(settings["InputFileDir"] + settings["InputFilename"]+ settings["InputExtension"])
+
+  print(sourceRes)
+  input();
 
   result = False
   filesEncoded = 0
@@ -125,9 +158,10 @@ def main():
     print()
     pp.pprint(settings)
 
+  # Encode quality options for traditional video
   encodeVideoBatch(modSettings,settings)
 
-  # When the encodeVideoBatch returns, we can modify the settings further and
+  # Modify the settings further and
   # Create a new batch based on the /ss/lossless.webm file.
   modSettings["InputExtension"] = ".webm"
   modSettings["InputFilename"] = "lossless"
@@ -136,7 +170,9 @@ def main():
   modSettings["StripAudio"] = True
   modSettings["TrimVideo"] = False
   modSettings["TrimVideoEnd"] = False
+  # modSettings["BatchOutputResolutions"] = ['320x240','640x480']
 
+  # Encode Slideshow videos
   encodeVideoBatch(modSettings,settings)
 
 
