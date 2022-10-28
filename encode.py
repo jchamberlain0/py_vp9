@@ -1,4 +1,3 @@
-import json
 import yaml
 import pprint
 import time
@@ -8,6 +7,7 @@ import os
 import shutil
 import sys
 import subprocess
+
 import png
 import ocr
 import slideshow
@@ -17,7 +17,10 @@ import slideshow
 def getSourceResolution(filePath):
   ffprobe = ["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height", "-of", "csv=s=x:p=0", filePath]
 
-  # TODO: make this substring work with high res input files. no current use case for it.
+
+
+  # TODO: make this substring work with high res input files.
+  # That would only be useful for content released after ~2006
   return str(subprocess.check_output(ffprobe))[2:9]
 
   # try:
@@ -42,9 +45,6 @@ def encodeVideoBatch(modSettings,settings):
   sourcePath = settings["InputFileDir"] + settings["InputFilename"] + settings["InputExtension"];
   sourceRes = getSourceResolution(sourcePath)
 
-  print(sourceRes)
-  input();
-
   result = False
   filesEncoded = 0
   filesSkipped = 0
@@ -60,24 +60,11 @@ def encodeVideoBatch(modSettings,settings):
 
         for PixelFormat in settings['PixelFormats']:
           modSettings['PixelFormat'] = PixelFormat
-        
-          # default output resolution means don't scale.
-          # Um, maybe check if the source res is the same as the current output res here and everything else can stay the same!!!!!
-          # If the output resolution for this encode is the same as the video file,
-          # scaling can be turned off.
-          if sourceRes == OutputResolution:
-            modSettings['Scale'] = False
-            modSettings['OutResolution'] = OutputResolution
-          else:
-            modSettings['Scale'] = True
-            modSettings['OutResolution'] = OutputResolution
-          # if OutputResolution == 'default':
-          #   modSettings['Scale'] = False
-          #   modSettings['OutResolution'] = '640x480'
-          # else:
-          #   # set the resolution for these encodes.
-          #   modSettings['Scale'] = True
-          #   modSettings['OutResolution'] = OutputResolution 
+
+          # Update the current output resolution in settings for this batch
+          modSettings['OutResolution'] = OutputResolution
+          # Set flag for scaling, if the source file is not the same resolution as target
+          modSettings["Scale"] = sourceRes != OutputResolution
 
           for crf in settings['CRF']:
             # time.sleep(0.4)
@@ -120,11 +107,23 @@ def main():
   with open("settings.yaml", 'r') as stream:
     settings = yaml.safe_load(stream)
 
-  targetDir = settings['OutFileDir']+settings['NewOutputFolder']
+  # TODO: check if the source file exists and quit if not.
+
+  wantedDir = settings['NewOutputFolder']
+  newDir = wantedDir
+
+  folderCount = 1
+  
+  while os.path.exists(settings["OutFileDir"] + newDir):
+    newDir = wantedDir + "-" + str(folderCount)
+    folderCount += 1
+
+  settings["NewOutputFolder"] = newDir
+  finalDir = settings["OutFileDir"]+settings["NewOutputFolder"]
 
   try:
     print('creating output folder '+settings['NewOutputFolder'])
-    os.mkdir(targetDir)
+    os.mkdir(finalDir)
   except FileExistsError:
     # TODO: add a sequential digit to the output folder instead of quitting.
     print("Output folder \""+ settings['NewOutputFolder'] +"\" already exists.\nPlease rename output directory to avoid losing work.")
@@ -132,8 +131,8 @@ def main():
 
   # shutil.copyfile(os.path.dirname(os.path.realpath('settings.yaml')),settings['OutFileDir']+settings['NewOutputFolder']+"py_vp9.yaml")
 
-  # Copy settings to new target dir
-  shutil.copyfile('settings.yaml',targetDir+'/py_vp9.yaml')
+  # Copy settings to new new directory
+  shutil.copyfile('settings.yaml',finalDir+'/py_vp9.yaml')
 
   # other method to export settings.. This does not preserve line order, but it does strip comments...
   # print(targetDir)
@@ -141,8 +140,6 @@ def main():
   # yaml.dump(settings,settingsDump)
   # settingsDump.close()
   # with open()
-
-
 
   # settings copy that can be mutated to allow multiple results in single-encode context.
   modSettings = settings
