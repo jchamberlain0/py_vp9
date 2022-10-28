@@ -8,19 +8,17 @@ def encodex264(crf, settings):
   if settings['PixelFormat'] == 'yuv444p':
     print('x264: 4:4:4 chroma unsupported - skipping file')
     return 2
-  if settings['Scale']:
-    print('x264: Skipping 240p encodes.')
+  if settings['OutResolution'] == '320x240':
+    print('x264: Skipping 320x240 encodes.')
     return 2
 
   # List of arguments to pass to ffmpeg
   x264 = ['ffmpeg']
 
-  # Used to denote scaled resolution in output file
-  horizontalLines = "480"
-  if settings['Scale']:
-    # These args will be omitted entirely if Scale is false.
-    # TODO: make the horizontallines logic more robust, it will fail on 4-digit resolutions.
-    horizontalLines = settings['OutResolution'][4:7]
+  # Get the number after the x for filename and optional scaling.
+  resString = settings['OutResolution']
+  charX = resString.index('x')
+  horizontalLines = resString[charX+1:len(resString)]
 
   # Check if a CRF value was passed in - this will be used by batch mode.
   if crf == "defaultCRF":
@@ -28,11 +26,8 @@ def encodex264(crf, settings):
     # If a value was passed in, that will be used instead.
     crf = settings['CRFDefault']
   
-  if crf == '10':
-    print('x264: Skipping crf 10 encode..')
-    return 2
-  if crf == '0':
-    print('x264: Skipping crf 0 encode.')
+  if (int(crf) < 11):
+    print('x264: Skipping low crf encode ('+ str(crf) +')')
     return 2
 
   # Build first pass
