@@ -2,17 +2,13 @@ import subprocess
 import time
 
 # Encode a single lossless vp9 video from the unique png file output from the OCR script.
-# This can then be used to create another set of quality options in the "perfect video" format.
+# This file can be encoded again to create another set of quality options in the "slideshow video" format.
 # ffmpeg -framerate 20 -i %05d.png -pix_fmt yuv444p -c:v libvpx-vp9 -lossless 1 lossless-p.webm
 def encodeLossless(settings):
-
-
-
 
   uniqueDirectory = settings['OutFileDir']+settings['NewOutputFolder']+"/unique/"
   slideshowDirectory = settings['OutFileDir']+settings['NewOutputFolder']+"/ss/"
   outputFile = slideshowDirectory+"lossless.webm"
-
 
   # List of arguments to pass to ffmpeg
   slideshow = ['ffmpeg']
@@ -37,10 +33,12 @@ def encodeLossless(settings):
   for arg in slideshow:
     # Print the args without the brackets and commas
     print(arg, end=" ", flush=True)
-  if not settings['SkipEncoding']:
-    commandResult = subprocess.run(slideshow, capture_output=True)
+  # TODO: rest of script will fail if this lossless file isn't here,
+  # due to ffprobe trying to find it. Turn back on "skipencoding" check
+  commandResult = subprocess.run(slideshow, capture_output=True)
   print(commandResult)
-
-  print
+  # if not settings['SkipEncoding']:
+  #   commandResult = subprocess.run(slideshow, capture_output=True)
+  # print(commandResult)
 
   return 1
