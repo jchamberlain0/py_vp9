@@ -116,8 +116,8 @@ def createMontage(settings,imageOffset,gridWidth):
 
 def createMontages(settings):
 
-  imageOffsets = [4,12,108,432]
-  gridWidths = [2,4,12,24]
+  imageOffsets = [4,12,108]
+  gridWidths = [2,4,12]
 
   for i in range(len(imageOffsets)):
     createMontage(settings,imageOffsets[i],gridWidths[i])
