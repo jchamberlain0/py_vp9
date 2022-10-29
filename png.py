@@ -142,3 +142,25 @@ def createJPG(settings,imageOffset,gridWidth):
   print(commandResult)
 
   return True
+
+def createUniqueJPGs(sourcePath,destinationPath):
+  # Convert all png files in folder "sourcePath" to jpg
+  # Output the new files to destinationPath
+
+  pngFiles = glob.glob(sourcePath+"*.png")
+
+  for frameNo in range(len(pngFiles)):
+    command = ["magick"]
+    command.append(pngFiles[frameNo])
+    command.append("-quality")
+    command.append("95")
+    command.append(destinationPath+"{:05d}".format(frameNo)+".jpg")
+
+    print(command)
+    commandResult = subprocess.run(command, capture_output=True)
+    print(commandResult)
+
+  return True
+
+def pngToJPG(path):
+  print('pngToJPG')
