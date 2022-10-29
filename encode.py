@@ -7,6 +7,7 @@ import os
 import shutil
 import sys
 import subprocess
+import copy
 
 import png
 import ocr
@@ -17,28 +18,15 @@ import slideshow
 def getSourceResolution(filePath):
   ffprobe = ["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height", "-of", "csv=s=x:p=0", filePath]
 
-
-
   # TODO: make this substring work with high res input files.
   # That would only be useful for content released after ~2006
-  return str(subprocess.check_output(ffprobe))[2:9]
+  resolution = str(subprocess.check_output(ffprobe))[2:9]
 
-  # try:
-  #   commandResult = subprocess.check_output(ffprobe)
-  #   print(str(commandResult)[2:9])
-  #   input()
-
-  #   # TODO: get the substring of the returned value
-  #   # The first character is free, at position 2. The ending character is going to be variable for 4 digit resolutions,
-  #   # 
-  #   # It's gonna be something like commandResult = 
-
-  #   return "doodoocaca"
-
-  # except:
-  #   print("Error getting source video resolution.")
-  #   sys.exit("Exiting");
-  # return sourceRes
+  # Basic integrity check for the resolution string, quit when invalid.
+  if resolution.index('x') == 3 and len(resolution) == 7:
+    return resolution
+  else:
+    sys.exit("Aborting - Invalid resolution retrieved from ffprobe: " + resolution)
 
 def encodeVideoBatch(modSettings,settings):
 
@@ -134,6 +122,8 @@ def main():
   # Copy settings to new new directory
   shutil.copyfile('settings.yaml',finalDir+'/py_vp9.yaml')
 
+  os.startfile(finalDir)
+
   # other method to export settings.. This does not preserve line order, but it does strip comments...
   # print(targetDir)
   # settingsDump = open(targetDir+'py_vp9.yaml','w')
@@ -142,6 +132,7 @@ def main():
   # with open()
 
   # settings copy that can be mutated to allow multiple results in single-encode context.
+  # modSettings = copy.deepcopy(settings)
   modSettings = settings
 
   if settings['CreateImages']:
@@ -154,9 +145,12 @@ def main():
       # Run adjacent ocr script to remove duplicate frames
       os.mkdir(settings['OutFileDir']+settings['NewOutputFolder']+'/unique')
       os.mkdir(settings['OutFileDir']+settings['NewOutputFolder']+'/ss')
+      os.mkdir(settings['OutFileDir']+settings['NewOutputFolder']+'/jpg')
       if ocr.readFolderInputs(settings['OutFileDir']+settings['NewOutputFolder']+'/images/*', settings['OutFileDir']+settings['NewOutputFolder']+'/unique/'):
         print('saved unique files.')
         slideshow.encodeLossless(modSettings)
+        if png.createUniqueJPGs(settings['OutFileDir']+settings['NewOutputFolder']+'/unique/',settings['OutFileDir']+settings['NewOutputFolder']+'/jpg/'):
+          print('saved unique jpgs.')
 
   if settings['Debug']:
     pp = pprint.PrettyPrinter(indent=2)
@@ -175,15 +169,9 @@ def main():
   modSettings["StripAudio"] = True
   modSettings["TrimVideo"] = False
   modSettings["TrimVideoEnd"] = False
-  # modSettings["BatchOutputResolutions"] = ['320x240','640x480']
 
   # Encode Slideshow videos
   encodeVideoBatch(modSettings,settings)
-
-
-  # sys.exit("bye")
-
-
 
   print("--- %s seconds ---" % (time.time() - startTime))
 
@@ -191,7 +179,5 @@ def main():
   # dissapear immediately when invoking outside the CLI.
   # input()
 
-
-# don't run when imported
 if __name__ == "__main__":
    main()
