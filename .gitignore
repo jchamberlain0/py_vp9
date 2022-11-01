@@ -1,4 +1,5 @@
 ffmpeg2pass-0.log
+*.temp
 __pycache__
 buttonDetails.py
 char.py
