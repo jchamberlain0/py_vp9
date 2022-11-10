@@ -1,12 +1,30 @@
 import subprocess
 import time
+import sys
 
-# Encode a single lossless vp9 video from the unique png file output from the OCR script.
+# Encode a single lossless vp9 video from the unique png file sequence output by the OCR script.
 # This file can be encoded again to create another set of quality options in the "slideshow video" format.
 # ffmpeg -framerate 20 -i %05d.png -pix_fmt yuv444p -c:v libvpx-vp9 -lossless 1 lossless-p.webm
 def encodeLossless(settings):
 
-  uniqueDirectory = settings['OutFileDir']+settings['NewOutputFolder']+"/unique/"
+  # if not settings["RunOCR"]:
+  #   print('OCR is disabled. Creating video at ')
+
+  framerate = "20"
+
+
+  # If ocr mode is not turned on, a slideshow may still be created from the frame dump.
+  # Is there a point in doing this?
+  if settings["RunOCR"]:
+    # If OCR mode is on, create a 20fps slideshow from the unique images.
+    uniqueDirectory = settings['OutFileDir']+settings['NewOutputFolder']+"/unique/"
+    framerate = "20"
+  else:
+    # If OCR is off, create a 60fps slideshow from the non-unique images.
+    # This format is for native 60fps recordings and will not have great results for low framerate games.
+    uniqueDirectory = settings['OutFileDir']+settings['NewOutputFolder']+"/images/"
+    framerate = "60"
+  
   slideshowDirectory = settings['OutFileDir']+settings['NewOutputFolder']+"/ss/"
   outputFile = slideshowDirectory+"lossless.webm"
 
@@ -14,7 +32,7 @@ def encodeLossless(settings):
   slideshow = ['ffmpeg']
   slideshow.append("-y")
   slideshow.append("-framerate")
-  slideshow.append("20")
+  slideshow.append(framerate)
   slideshow.append("-i")
   slideshow.append(uniqueDirectory+"%05d.png")
   slideshow.append("-pix_fmt")
@@ -35,7 +53,18 @@ def encodeLossless(settings):
     print(arg, end=" ", flush=True)
   # TODO: rest of script will fail if this lossless file isn't here,
   # due to ffprobe trying to find it. Turn back on "skipencoding" check
-  commandResult = subprocess.run(slideshow, capture_output=True)
+  # commandResult = subprocess.run(slideshow, capture_output=True)
+
+  process = subprocess.Popen(slideshow, shell = True,bufsize = 1,
+                           stdout=subprocess.PIPE, stderr = subprocess.STDOUT,encoding='utf-8', errors = 'replace' ) 
+  while True:
+    realtime_output = process.stdout.readline()
+    if realtime_output == '' and process.poll() is not None:
+      break
+    if realtime_output:
+      print(realtime_output.strip(), flush=False)
+      sys.stdout.flush()
+  
   print(commandResult)
   # if not settings['SkipEncoding']:
   #   commandResult = subprocess.run(slideshow, capture_output=True)
