@@ -132,8 +132,9 @@ def main():
   # with open()
 
   # settings copy that can be mutated to allow multiple results in single-encode context.
-  # modSettings = copy.deepcopy(settings)
   modSettings = settings
+  # deep copy isn't working for some reason.
+  # modSettings = copy.deepcopy(settings)
 
   if settings['CreateImages']:
     os.mkdir(settings['OutFileDir']+settings['NewOutputFolder']+'/images')
@@ -142,13 +143,15 @@ def main():
     if png.createMontages(settings):
       print('saved montages.')
     if settings['RunOCR']:
-      # Run adjacent ocr script to remove duplicate frames
+      # Run adjacent ocr script to remove duplicate frames from the video.
       os.mkdir(settings['OutFileDir']+settings['NewOutputFolder']+'/unique')
       os.mkdir(settings['OutFileDir']+settings['NewOutputFolder']+'/ss')
       os.mkdir(settings['OutFileDir']+settings['NewOutputFolder']+'/jpg')
       if ocr.readFolderInputs(settings['OutFileDir']+settings['NewOutputFolder']+'/images/*', settings['OutFileDir']+settings['NewOutputFolder']+'/unique/'):
         print('saved unique files.')
-        slideshow.encodeLossless(modSettings)
+        # TODO: add a case here where the slideshow is still encoded from a sequence that was not deduped.
+        if settings["EncodeSlideshow"]:
+          slideshow.encodeLossless(modSettings)
         if png.createUniqueJPGs(settings['OutFileDir']+settings['NewOutputFolder']+'/unique/',settings['OutFileDir']+settings['NewOutputFolder']+'/jpg/'):
           print('saved unique jpgs.')
 
@@ -160,20 +163,24 @@ def main():
   # Encode quality options for traditional video
   encodeVideoBatch(modSettings,settings)
 
-  # Modify the settings further and
-  # Create a new batch based on the /ss/lossless.webm file.
-  modSettings["InputExtension"] = ".webm"
-  modSettings["InputFilename"] = "lossless"
-  modSettings["InputFileDir"] = modSettings["OutFileDir"] + modSettings["NewOutputFolder"]+ "/ss/"
-  modSettings["NewOutputFolder"] = modSettings["NewOutputFolder"] + "/ss/"
-  modSettings["StripAudio"] = True
-  modSettings["TrimVideo"] = False
-  modSettings["TrimVideoEnd"] = False
 
-  # Encode Slideshow videos
-  encodeVideoBatch(modSettings,settings)
+  if settings["RunOCR"] and settings["EncodeSlideshow"]:
+    # Modify the settings further and
+    # Create a new batch based on the /ss/lossless.webm file.
 
-  print("--- %s seconds ---" % (time.time() - startTime))
+    modSettings["InputExtension"] = ".webm"
+    modSettings["OutputExtension"] = ".webm"
+    modSettings["InputFilename"] = "lossless"
+    modSettings["InputFileDir"] = modSettings["OutFileDir"] + modSettings["NewOutputFolder"]+ "/ss/"
+    modSettings["NewOutputFolder"] = modSettings["NewOutputFolder"] + "/ss/"
+    modSettings["StripAudio"] = True
+    modSettings["TrimVideo"] = False
+    modSettings["TrimVideoEnd"] = False
+
+    # Encode Slideshow videos
+    encodeVideoBatch(modSettings,settings)
+
+  print("--- %s minutes ---" % ((time.time() - startTime) / 60 ))
 
   # wait for user input. this makes it so the output doesn't
   # dissapear immediately when invoking outside the CLI.
