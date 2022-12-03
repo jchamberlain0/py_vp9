@@ -166,13 +166,13 @@ def main():
 
   if settings["RunOCR"] and settings["EncodeSlideshow"]:
     # Modify the settings further and
-    # Create a new batch based on the /ss/lossless.webm file.
+    # Create a new batch based on the /ss/lossless.webm file created from slideshow.encodeLossless()
 
     modSettings["InputExtension"] = ".webm"
     modSettings["OutputExtension"] = ".webm"
     modSettings["InputFilename"] = "lossless"
     modSettings["InputFileDir"] = modSettings["OutFileDir"] + modSettings["NewOutputFolder"]+ "/ss/"
-    modSettings["NewOutputFolder"] = modSettings["NewOutputFolder"] + "/ss/"
+    modSettings["NewOutputFolder"] = modSettings["NewOutputFolder"] + "/ss"
     modSettings["StripAudio"] = True
     modSettings["TrimVideo"] = False
     modSettings["TrimVideoEnd"] = False
