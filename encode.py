@@ -95,6 +95,19 @@ def main():
   with open("settings.yaml", 'r') as stream:
     settings = yaml.safe_load(stream)
 
+
+
+  # Check if the flag was set to use cutscene settings.
+  # Replace the settings with cutscene settings when set.
+  # These settings rarely change and only needs a couple of features.
+  settingsFilename = 'settings.yaml'
+  if settings['UseCutsceneSettings']:
+    settingsFilename = 'cutscene_settings.yaml'
+    with open("cutscene_settings.yaml",'r') as stream:
+      settings = yaml.safe_load(stream)
+  
+
+
   # TODO: check if the source file exists and quit if not.
 
   wantedDir = settings['NewOutputFolder']
@@ -120,7 +133,7 @@ def main():
   # shutil.copyfile(os.path.dirname(os.path.realpath('settings.yaml')),settings['OutFileDir']+settings['NewOutputFolder']+"py_vp9.yaml")
 
   # Copy settings to new new directory
-  shutil.copyfile('settings.yaml',finalDir+'/py_vp9.yaml')
+  shutil.copyfile(settingsFilename,finalDir+'/py_vp9.yaml')
 
   os.startfile(finalDir)
 
