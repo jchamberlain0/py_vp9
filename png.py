@@ -116,8 +116,8 @@ def createMontage(settings,imageOffset,gridWidth):
 
 def createMontages(settings):
 
-  imageOffsets = [4,12,108,432]
-  gridWidths = [2,4,12,24]
+  imageOffsets = [4,12,108]
+  gridWidths = [2,4,12]
 
   for i in range(len(imageOffsets)):
     createMontage(settings,imageOffsets[i],gridWidths[i])
@@ -142,3 +142,25 @@ def createJPG(settings,imageOffset,gridWidth):
   print(commandResult)
 
   return True
+
+def createUniqueJPGs(sourcePath,destinationPath):
+  # Convert all png files in folder "sourcePath" to jpg
+  # Output the new files to destinationPath
+
+  pngFiles = glob.glob(sourcePath+"*.png")
+
+  for frameNo in range(len(pngFiles)):
+    command = ["magick"]
+    command.append(pngFiles[frameNo])
+    command.append("-quality")
+    command.append("95")
+    command.append(destinationPath+"{:05d}".format(frameNo)+".jpg")
+
+    print(command)
+    commandResult = subprocess.run(command, capture_output=True)
+    print(commandResult)
+
+  return True
+
+def pngToJPG(path):
+  print('pngToJPG')

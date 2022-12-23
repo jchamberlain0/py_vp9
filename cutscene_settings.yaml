@@ -1,8 +1,9 @@
 ---
+# Cutscene settings. The inputs for this one never change.
+# Set a setting in
 # InputFileDir: E:/media/zgv/backups-april2022/
 # InputFileDir: E:/media/zgv/backups-sept-2022/
 # InputFileDir: /home/ec2-user/video/input/
-UseCutsceneSettings: true
 InputFileDir: C:/video/lossless/
 # InputFileDir: D:/rawvideo/
 InputFilename: 2022-12-17_15-02-57
@@ -10,18 +11,18 @@ InputFilename: 2022-12-17_15-02-57
 # InputExtension: '.webm'
 InputExtension: '.avi'
 
-OutFileDir: C:/video/py_vp9/
+OutFileDir: C:/video/py_vp9/v240/
 # OutFileDir: /home/ec2-user/video/input/
 # OutFileDir: D:/renders/
-NewOutputFolder: 'block-skip-redo'
+NewOutputFolder: 'new-cutscene'
 OutputExtension: '.webm'
 # OutputCodec: 'libvpx'
 OutputCodec: 'libvpx-vp9'
 
-StripAudio: false
+StripAudio: true
 
-TrimVideo: true
-TrimStart: '00:00:00.366'
+TrimVideo: false
+TrimStart: '00:00:00.000'
 TrimVideoEnd: false
 TrimEnd: '00:00:00.000'
 
@@ -34,7 +35,7 @@ SetPixelFormat: true
 PixelFormat: yuv444p
 PixelFormats:
   - 'yuv444p'
-  - 'yuv420p'
+  # - 'yuv420p'
 
 UseDeadline: false
 Deadline: 'best'
@@ -52,7 +53,7 @@ CRF: #batch mode crf
 
 BatchOutputResolutions:
   - '320x240'
-  - '640x480'
+  # - '640x480'
   # - '960x720'
   # - '1280x960'
   # - '1600x1200'
@@ -63,17 +64,17 @@ BatchOutputResolutions:
   # - '2880x2160'
 
 BatchCodecs:
-  - 'libx264'
+  # - 'libx264'
   - 'libvpx-vp9'
 
 Debug: true
 
-CreateImages: true
+CreateImages: false
 
 #extra flags: print commands but do not run
 SkipEncoding: false
-SkipImages: false
+SkipImages: true
 
-RunOCR: true
-EncodeSlideshow: true
+RunOCR: false
+EncodeSlideshow: false
 # Bug- video encodes infinitely before even hitting the ss folder?
