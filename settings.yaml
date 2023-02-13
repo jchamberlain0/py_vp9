@@ -1,11 +1,14 @@
 ---
-# InputFileDir: E:/media/zgv/backups-april2022/
-# InputFileDir: E:/media/zgv/backups-sept-2022/
-# InputFileDir: /home/ec2-user/video/input/
 UseCutsceneSettings: true
 InputFileDir: C:/video/lossless/
+# InputFileDir: E:/media/zgv/backups-sept-2022/
+# InputFileDir: 'D:/raw-archive/backup-nov-2022/'
+# InputFileDir: 'D:/raw-archive/backup-jan-2023/'
+# InputFileDir: /home/ec2-user/video/input/
+# InputFileDir: E:/media/zgv/backups-april2022/
+
 # InputFileDir: D:/rawvideo/
-InputFilename: 2022-12-17_15-02-57
+InputFilename: 2023-01-26_21-08-43
 # InputExtension: '.mp4'
 # InputExtension: '.webm'
 InputExtension: '.avi'
@@ -13,15 +16,15 @@ InputExtension: '.avi'
 OutFileDir: C:/video/py_vp9/
 # OutFileDir: /home/ec2-user/video/input/
 # OutFileDir: D:/renders/
-NewOutputFolder: 'block-skip-redo'
+NewOutputFolder: 'movie-name'
 OutputExtension: '.webm'
 # OutputCodec: 'libvpx'
 OutputCodec: 'libvpx-vp9'
-
+ 
 StripAudio: false
 
 TrimVideo: true
-TrimStart: '00:00:00.366'
+TrimStart: '00:00:00.000'
 TrimVideoEnd: false
 TrimEnd: '00:00:00.000'
 
@@ -48,7 +51,7 @@ CRF: #batch mode crf
   - '30'
   - '20'
   - '10'
-  - '0'
+  # - '0'
 
 BatchOutputResolutions:
   - '320x240'
@@ -70,10 +73,9 @@ Debug: true
 
 CreateImages: true
 
-#extra flags: print commands but do not run
+#extra flags: print commands, but do not run them
 SkipEncoding: false
 SkipImages: false
 
 RunOCR: true
 EncodeSlideshow: true
-# Bug- video encodes infinitely before even hitting the ss folder?
