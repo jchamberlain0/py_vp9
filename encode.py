@@ -89,7 +89,7 @@ def encodeVideoBatch(modSettings,settings):
 
 
 
-def main():  
+def main():
   startTime = time.time()
 
   with open("settings.yaml", 'r') as stream:
@@ -162,8 +162,8 @@ def main():
       os.mkdir(settings['OutFileDir']+settings['NewOutputFolder']+'/jpg')
       if ocr.readFolderInputs(settings['OutFileDir']+settings['NewOutputFolder']+'/images/*', settings['OutFileDir']+settings['NewOutputFolder']+'/unique/'):
         print('saved unique files.')
-        # print('waiting on user input. fix the unique files, then press ENTER to continue...')
-        # input()
+        print('waiting on user input. fix the unique files, then press ENTER to continue...')
+        input()
         # TODO: add a case here where the slideshow is still encoded from a sequence that was not deduped.
         if settings["EncodeSlideshow"]:
           slideshow.encodeLossless(modSettings)
