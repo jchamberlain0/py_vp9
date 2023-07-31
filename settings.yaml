@@ -1,5 +1,5 @@
 ---
-UseCutsceneSettings: true
+UseCutsceneSettings: false
 InputFileDir: C:/video/lossless/
 # InputFileDir: E:/media/zgv/backups-sept-2022/
 # InputFileDir: 'D:/raw-archive/backup-nov-2022/'
@@ -8,7 +8,7 @@ InputFileDir: C:/video/lossless/
 # InputFileDir: E:/media/zgv/backups-april2022/
 
 # InputFileDir: D:/rawvideo/
-InputFilename: 2023-01-26_21-08-43
+InputFilename: 2023-07-20_21-27-50
 # InputExtension: '.mp4'
 # InputExtension: '.webm'
 InputExtension: '.avi'
@@ -16,7 +16,7 @@ InputExtension: '.avi'
 OutFileDir: C:/video/py_vp9/
 # OutFileDir: /home/ec2-user/video/input/
 # OutFileDir: D:/renders/
-NewOutputFolder: 'movie-name'
+NewOutputFolder: 'new-movie'
 OutputExtension: '.webm'
 # OutputCodec: 'libvpx'
 OutputCodec: 'libvpx-vp9'
@@ -24,7 +24,7 @@ OutputCodec: 'libvpx-vp9'
 StripAudio: false
 
 TrimVideo: true
-TrimStart: '00:00:00.000'
+TrimStart: '00:00:00.182'
 TrimVideoEnd: false
 TrimEnd: '00:00:00.000'
 
