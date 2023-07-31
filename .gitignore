@@ -6,3 +6,6 @@ char.py
 ocr.py
 colors.py
 inputs.json
+dist
+build
+encode.spec
